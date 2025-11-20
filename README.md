@@ -34,4 +34,6 @@ npm start
 
 ## Dependencies
 
-The only dependency is `enable3d`. All other dependencies (three.js etc.), are installed with `enable3d`.
+The only dependency is `enable3d`. All other dependencies (three.js etc.), are installed with `enable3d`. 
+
+edit for the sake of forking
