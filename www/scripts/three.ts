@@ -18,6 +18,7 @@ const MainScene = () => {
 
   // tunable gameplay values
   const ROTATION_SPEED = .01;
+  const maxRotation = Math.PI / 6;
 
   // control setup
   const keys: Record<string, boolean> = {};
@@ -122,11 +123,11 @@ const MainScene = () => {
   ground.body.setCollisionFlags(2);
 
   // key creation
-  let delta = [0, 0, 0];
-  createKeybinding('s', () => delta[0] += ROTATION_SPEED, () => delta[0] -= ROTATION_SPEED);
-  createKeybinding('w', () => delta[0] -= ROTATION_SPEED, () => delta[0] += ROTATION_SPEED);
-  createKeybinding('d', () => delta[1] -= ROTATION_SPEED, () => delta[1] += ROTATION_SPEED);
-  createKeybinding('a', () => delta[1] += ROTATION_SPEED, () => delta[1] -= ROTATION_SPEED);
+  let delta = { x: 0, z: 0 };
+  createKeybinding('s', () => delta.x += ROTATION_SPEED, () => delta.x -= ROTATION_SPEED);
+  createKeybinding('w', () => delta.x -= ROTATION_SPEED, () => delta.x += ROTATION_SPEED);
+  createKeybinding('d', () => delta.z -= ROTATION_SPEED, () => delta.z += ROTATION_SPEED);
+  createKeybinding('a', () => delta.z += ROTATION_SPEED, () => delta.z -= ROTATION_SPEED);
 
   // rolling ball
   const ball = physics.add.sphere({ x: 0, y: 3, z: 0, radius: 1 }, { lambert: { color: YELLOW } });
@@ -150,6 +151,11 @@ const MainScene = () => {
     return button;
   }
 
+  const updateRotation = () => {
+    ground.rotation.x = Math.max(-maxRotation, Math.min(maxRotation, ground.rotation.x + delta.x));
+    ground.rotation.z = Math.max(-maxRotation, Math.min(maxRotation, ground.rotation.z + delta.z));
+  }
+
   // button creation
   const winButton = createButton(-5, 1, 0, GREEN, () => {
     endSprite.visible = true;
@@ -164,9 +170,7 @@ const MainScene = () => {
 
   // loop
   const animate = () => {
-    ground.rotation.x += delta[0];
-    ground.rotation.z += delta[1];
-    console.log(delta[1]);
+    updateRotation();
     ground.body.needUpdate = true;
     physics.update(clock.getDelta() * 1000);
     physics.updateDebugger();
