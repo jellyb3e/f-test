@@ -1,37 +1,36 @@
-# Three.js & ammo.js (enable3d)
+# 121-Final-Project
 
-<img width="640" alt="screenshot" src="./readme/screenshot.png">
+## Devlog Entry - 21 November 2025
 
----
+### How we satisfied the software requirements
 
-## Example of Three.js with ammo.js
+1. We are developing our game in TypeScript!
+2. We are using three.js for 3d rendering
+3. We are using ammo.js for physics simulation
+4. Our puzzle requires the player to hit the green button to win. If they hit the wrong one, they lose!
+5. The player is able to control their movement to navigate toward either button
+6. When the player hits either button (red or green), a text popup will appear for win/lose states
+7. We have linting integrated through Deno
+8. We have set up automatic packaging and deployment to GitHub Pages
 
-- Contains a **CSG Example with BufferGeometries**.
-- Contains the **Flat Package for 2D Elements**.
+### Reflection
 
-## Projects
+We have updated our devlog entry to reflect the libraries we're currently using-- there was a bit of confusion as to whether three.js was just for 3d rendering or if it also handled physics. Additionally, we are using npm to run the dev server rather than deno which is what we used in our intial build. However, we still intend to use deno for linting.
 
-The `index.ts` file contains to different project:
+## Devlog Entry - 14 November 2025
 
-- `three.ts` file contains a three.js project with Enable3d's **Physics Extension**.
-- `standalone.ts` file contains a **Standalone Enable3d** project.
+### Introducing the team
 
-## Install & Run
+Aegis Michael: Design Lead
+Julia Manou: Tools Lead + Testing Lead
+Sophie DeGeorge: Engine Lead
 
-```console
-# download this repo
-npx gitget enable3d/threejs-ammojs-webpack-example enable3d-webpack
+### Tools and materials
 
-# navigate into the directory
-cd enable3d-webpack
+Language: We decided to go with TypeScript since it’s what we’ve been using for the class and we are all familiar with the language. Because we’re using a web-dev environment, we’ll almost definitely be using CSS as well, and HTML is a given.
+Tools: We will be coding in Visual Studio Code on codespaces because that is what we are most familiar with. Additionally, we will be using three.js for 3d rendering and ammo.js for physics.
+Generative AI: We will not be using any generative AI.
 
-# install
-npm install
+### Outlook
 
-# start
-npm start
-```
-
-## Dependencies
-
-The only dependency is `enable3d`. All other dependencies (three.js etc.), are installed with `enable3d`. 
+We are hoping to expand on our knowledge of web development. More specifically, we are interested in learning how to make browser games more interesting and make more interesting browser games!
