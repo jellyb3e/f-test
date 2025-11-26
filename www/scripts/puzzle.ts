@@ -3,11 +3,10 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 // physics
-import { AmmoPhysics, ExtendedMesh, ExtendedObject3D, PhysicsLoader } from '@enable3d/ammo-physics';
+import { AmmoPhysics, PhysicsLoader } from '@enable3d/ammo-physics';
 
 // flat
 import { TextTexture, TextSprite } from '@enable3d/three-graphics/dist/flat';
-import { ThreeGraphics } from '@enable3d/three-graphics';
 
 const MainScene = () => {
   // colors

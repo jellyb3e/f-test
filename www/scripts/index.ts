@@ -3,7 +3,7 @@
  */
 
 // start three.js scene (with enable3d physics)
-import './three'
+import './room1'
 
 // start standalone enable3d scene
 // import './standalone'
