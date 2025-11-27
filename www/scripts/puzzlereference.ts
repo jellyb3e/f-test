@@ -1,3 +1,4 @@
+
 // three.js
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -8,6 +9,8 @@ import { AmmoPhysics, PhysicsLoader } from '@enable3d/ammo-physics';
 // flat
 import { TextTexture, TextSprite } from '@enable3d/three-graphics/dist/flat';
 
+import * as Global from './global';
+
 const MainScene = () => {
   // colors
   const YELLOW = 0xffff00;
@@ -16,10 +19,6 @@ const MainScene = () => {
   const BACKGROUND_COLOR = 0xf0f0f0;
   const GROUND_COLOR = 0x704e30;
   const HAND_COLOR = 0xcde01f;
-
-  // tunable gameplay values
-  const ROTATION_SPEED = .01;
-  const maxRotation = Math.PI / 6;
 
   // control setup
   const keys: Record<string, boolean> = {};
@@ -123,13 +122,6 @@ const MainScene = () => {
   );
   ground.body.setCollisionFlags(2);
 
-  // key creation
-  let delta = { x: 0, z: 0 };
-  createKeybinding('s', () => delta.x += ROTATION_SPEED, () => delta.x -= ROTATION_SPEED);
-  createKeybinding('w', () => delta.x -= ROTATION_SPEED, () => delta.x += ROTATION_SPEED);
-  createKeybinding('d', () => delta.z -= ROTATION_SPEED, () => delta.z += ROTATION_SPEED);
-  createKeybinding('a', () => delta.z += ROTATION_SPEED, () => delta.z -= ROTATION_SPEED);
-
   // rolling ball
   const ball = physics.add.sphere({ x: 0, y: 3, z: 0, radius: 1 }, { lambert: { color: YELLOW } });
 
@@ -153,8 +145,8 @@ const MainScene = () => {
   }
 
   const updateRotation = () => {
-    ground.rotation.x = Math.max(-maxRotation, Math.min(maxRotation, ground.rotation.x + delta.x));
-    ground.rotation.z = Math.max(-maxRotation, Math.min(maxRotation, ground.rotation.z + delta.z));
+    ground.rotation.x = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.x + Global.delta.x));
+    ground.rotation.z = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.z + Global.delta.z));
   }
 
   const createHand = (hand: "left" | "right") => {
