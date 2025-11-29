@@ -1,3 +1,5 @@
+/*
+
 import { Project, Scene3D, PhysicsLoader, THREE, ExtendedMesh } from 'enable3d'
 
 class MainScene extends Scene3D {
@@ -53,3 +55,5 @@ class MainScene extends Scene3D {
 }
 
 PhysicsLoader('/ammo', () => new Project({ scenes: [MainScene], antialias: true }))
+
+*/

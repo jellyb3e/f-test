@@ -14,6 +14,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@enable3d/ammo-physics": "^0.26.1",
+    "@enable3d/three-graphics": "^0.26.1",
     "enable3d": "^0.26.1"
   },
   "devDependencies": {
