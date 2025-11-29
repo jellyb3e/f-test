@@ -30,14 +30,18 @@ export function makeRoom(physics: AmmoPhysics) {
 
 // clamp one axis value (x,y,z) of player pos when going through doors
 function clampDoorPos(num: number) {
-    const doorOffset = 2;   // how far from door the player spawns (so scenes don't flicker forever)
+    const doorOffset = 1;   // how far from door the player spawns (so scenes don't flicker forever)
 
     return (Math.abs(num) >= 10) ? ((num > 0) ? doorOffset - num : -(num + doorOffset)) : num;
 }
 
 // door creation function
-export function makeDoor(x: number, y: number, z: number, physics: AmmoPhysics, nextRoom: string) {
+export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string) {
     const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 }, { lambert: { color: Global.DOOR_COLOR } });
+    door.body.setCollisionFlags(2);
+    door.rotation.y = rotation * (Math.PI / 180);
+    door.body.needUpdate = true;
+    //door.setRotationFromAxisAngle(new THREE.Vector3(0,1,0),radians);
 
     door.body.on.collision((other: any) => {
         if (other.userData.tag == "player") {
@@ -75,7 +79,7 @@ const drawRectangle = ctx => {
 export function drawInventory(scene2d: THREE.Scene) {
     for (let i = 0; i < Global.inventorySlots; i++) {
         const inventorySlot = new DrawSprite(Global.inventorySlotSize, Global.inventorySlotSize, drawRectangle);
-        inventorySlot.setPosition(window.innerWidth - Global.slotOffset - (Global.inventorySlotSize/2) - ((Global.inventorySlotSize + Global.slotOffset) * i), (Global.inventorySlotSize / 2) + Global.slotOffset);
+        inventorySlot.setPosition(window.innerWidth - Global.slotOffset - (Global.inventorySlotSize / 2) - ((Global.inventorySlotSize + Global.slotOffset) * i), (Global.inventorySlotSize / 2) + Global.slotOffset);
         scene2d.add(inventorySlot);
     }
 }

@@ -33,7 +33,7 @@ export const Room23Scene = () => {
     let player: ExtendedMesh = ThreeUtils.makePlayer(physics);
 
     ThreeUtils.makeRoom(physics);
-    ThreeUtils.makeDoor(-10.25, 2, 0, physics, "room11");
+    ThreeUtils.makeDoor(-10, 2, 0, 0, physics, "room11");
 
     // clock
     const clock = new THREE.Clock();
