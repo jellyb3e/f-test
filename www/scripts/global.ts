@@ -6,6 +6,13 @@ export const WALL_COLOR = 0x4b9963;
 export const GROUND_COLOR = 0x215e34;
 export const DOOR_COLOR = 0x67a66e;
 export const PLAYER_COLOR = 0xcde01f;
+export const BLUE = 0x4782b3;
+export const YELLOW = 0xffff00;
+export const GREEN = 0x449944;
+
+// tags
+export const playerTag = "player";
+export const collectibleTag = "collectible";
 
 // tunable gameplay values
 export const MOVE_SPEED = 3;
@@ -20,6 +27,7 @@ export const slotOffset = 10;
 // control setup
 export const delta = { x: 0, z: 0, del: 1 };
 export const keys: Record<string, boolean> = {};
+
 const createKeybinding = (
     key: string,
     onKeyDown: () => void,
@@ -53,6 +61,7 @@ export const switchScheme = (scheme: "rotation" | "movement") => {
     }
 };
 
+// SCENE HANDLING
 let currentSceneName: string = "";
 
 export function getCurrentScene() {
@@ -63,6 +72,7 @@ export function setCurrentScene(newSceneName: string) {
     currentSceneName = newSceneName;
 }
 
+// player position
 // this is for scene changes (so you enter a room from the side you entered) and for saving progress!
 let playerPosition: THREE.Vector3 = new THREE.Vector3(0, 1, 0);
 

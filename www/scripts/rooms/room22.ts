@@ -11,10 +11,6 @@ import * as Global from '../global';
 import * as ThreeUtils from '../threeUtils';
 
 export const Room22Scene = () => {
-    // colors
-    const YELLOW = 0xffff00;
-    const GREEN = 0x449944;
-
     // scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(Global.BACKGROUND_COLOR);
@@ -99,7 +95,7 @@ export const Room22Scene = () => {
                         collisionFlags: 2
                     },
                     {
-                        lambert: { color: GREEN },
+                        lambert: { color: Global.GREEN },
                         mass: 1
                     }
                 );
@@ -110,7 +106,7 @@ export const Room22Scene = () => {
     }
 
     // rolling ball
-    let ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: YELLOW } });
+    let ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } });
 
     const updateRotation = () => {
         // rotate ground and arms

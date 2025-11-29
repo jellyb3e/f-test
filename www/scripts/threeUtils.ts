@@ -28,23 +28,21 @@ export function makeRoom(physics: AmmoPhysics) {
     physics.add.box({ x: 0, y: 2, z: -10.5, width: 20, height: 5, depth: 1, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
 }
 
+const doorOffset = 1;   // how far from door the player spawns (so scenes don't flicker forever)
 // clamp one axis value (x,y,z) of player pos when going through doors
 function clampDoorPos(num: number) {
-    const doorOffset = 1;   // how far from door the player spawns (so scenes don't flicker forever)
-
     return (Math.abs(num) >= 10) ? ((num > 0) ? doorOffset - num : -(num + doorOffset)) : num;
 }
 
 // door creation function
-export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string) {
-    const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 }, { lambert: { color: Global.DOOR_COLOR } });
+export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string, color: number = Global.DOOR_COLOR) {
+    const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 }, { lambert: { color: color } });
     door.body.setCollisionFlags(2);
     door.rotation.y = rotation * (Math.PI / 180);
     door.body.needUpdate = true;
-    //door.setRotationFromAxisAngle(new THREE.Vector3(0,1,0),radians);
 
     door.body.on.collision((other: any) => {
-        if (other.userData.tag == "player") {
+        if (compareTag(other.userData.tag, Global.playerTag)) {
             let playerX = clampDoorPos(x);
             let playerY = Global.getPlayerPosition().y;
             let playerZ = clampDoorPos(z);
@@ -59,7 +57,7 @@ export function makePlayer(physics: AmmoPhysics) {
     const pos = Global.getPlayerPosition();
     const player = physics.add.capsule({ x: pos.x, y: pos.y, z: pos.z, radius: 0.75, length: 1, mass: 1 }, { lambert: { color: Global.PLAYER_COLOR } });
     player.body.setAngularFactor(0, 0, 0);
-    player.userData.tag = "player";
+    player.userData.tag = Global.playerTag;
     return player;
 }
 
@@ -82,4 +80,8 @@ export function drawInventory(scene2d: THREE.Scene) {
         inventorySlot.setPosition(window.innerWidth - Global.slotOffset - (Global.inventorySlotSize / 2) - ((Global.inventorySlotSize + Global.slotOffset) * i), (Global.inventorySlotSize / 2) + Global.slotOffset);
         scene2d.add(inventorySlot);
     }
+}
+
+export function compareTag(tag: string, otherTag: string) {
+    return tag == otherTag;
 }
