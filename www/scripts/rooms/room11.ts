@@ -19,23 +19,11 @@ export const Room11Scene = () => {
     const scene2d = new THREE.Scene();
 
     /** ADD HUD TEXT ETC HERE */
-
-    // add 2d text
-    const text = new TextTexture('welcome to chudville, population: you', { fontWeight: 'bold', fontSize: 48 });
-    const sprite = new TextSprite(text);
-    const scale = 0.5;
-    sprite.setScale(scale);
-    sprite.setPosition(0 + (text.width * scale) / 2 + 12, window.innerHeight - (text.height * scale) / 2 - 12);
-    scene2d.add(sprite);
-
     ThreeUtils.drawInventory(scene2d);
 
     // light
     scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 1));
     scene.add(new THREE.AmbientLight(0x666666));
-    const light = new THREE.DirectionalLight(0xdfebff, 1);
-    light.position.set(50, 200, 100);
-    light.position.multiplyScalar(1.3);
 
     // physics
     const physics = new AmmoPhysics(scene as any);

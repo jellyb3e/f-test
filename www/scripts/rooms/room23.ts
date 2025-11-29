@@ -24,9 +24,6 @@ export const Room23Scene = () => {
     // light
     scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 1));
     scene.add(new THREE.AmbientLight(0x666666));
-    const light = new THREE.DirectionalLight(0xdfebff, 1);
-    light.position.set(50, 200, 100);
-    light.position.multiplyScalar(1.3);
 
     // physics
     const physics = new AmmoPhysics(scene as any);
