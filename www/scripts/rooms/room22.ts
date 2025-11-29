@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 
 // physics
-import { AmmoPhysics } from '@enable3d/ammo-physics';
+import { AmmoPhysics, ExtendedMesh } from '@enable3d/ammo-physics';
 
 // flat
 import { TextTexture, TextSprite } from '@enable3d/three-graphics/dist/flat';
@@ -45,14 +45,28 @@ export const Room22Scene = () => {
             width: 20,
             height: 1,
             depth: 20,
-            collisionFlags: 0
+            collisionFlags: 2
         },
         {
             lambert: { color: Global.GROUND_COLOR },
             mass: 0
         }
     );
-    ground.body.setCollisionFlags(2);
+
+    // invisible ceiling
+    const ceiling = physics.add.box(
+        {
+            x: 0,
+            y: 2.25,
+            z: 0,
+            width: 20,
+            height: 1,
+            depth: 20,
+            collisionFlags: 2
+        }
+    );
+    ceiling.visible = false;
+    ground.add(ceiling);
 
     const mazeMap: number[] =
         [
@@ -74,6 +88,7 @@ export const Room22Scene = () => {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
         ]
 
+    const maze: ExtendedMesh[] = [];
     for (let i: number = 0; i < 16; i++) {
         for (let j: number = 0; j < 16; j++) {
             if (mazeMap[j * 16 + i] == 1) {
@@ -85,42 +100,26 @@ export const Room22Scene = () => {
                         width: 1.25,
                         height: 1,
                         depth: 1.25,
-                        collisionFlags: 1
+                        collisionFlags: 2
                     },
                     {
                         lambert: { color: GREEN },
                         mass: 1
                     }
                 );
+                maze.push(newCell);
                 ground.add(newCell);
             }
         }
     }
 
     // rolling ball
-    let ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.3 }, { lambert: { color: YELLOW } });
+    let ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: YELLOW } });
 
     const updateRotation = () => {
+        // rotate ground and arms
         ground.rotation.x = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.x + Global.delta.z));
         ground.rotation.z = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.z - Global.delta.x));
-    }
-
-    let lastBallPos: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
-    // prevents clipping
-    const limitBallSpeed = (deltaTime: number) => {
-        let ballPos: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
-        ball.getWorldPosition(ballPos);
-
-        const ballSpeed = Math.abs(lastBallPos.length() - ballPos.length()) * deltaTime;
-        console.log(ballSpeed);
-
-        if (ballSpeed > .2) {
-            //physics.destroy(ball);
-            //ball.removeFromParent();
-            //ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.3 }, { lambert: { color: YELLOW } });
-        }
-
-        lastBallPos = ballPos;
     }
 
     const createHand = (hand: "left" | "right") => {
@@ -158,10 +157,13 @@ export const Room22Scene = () => {
 
     const sceneUpdate = () => {
         const deltaTime = clock.getDelta() * 1000;
-        updateRotation();
-        limitBallSpeed(deltaTime);
 
+        updateRotation();
         ground.body.needUpdate = true;
+        ceiling.body.needUpdate = true;
+        maze.forEach((cell: ExtendedMesh) => {
+            cell.body.needUpdate = true;
+        });
 
         physics.update(deltaTime);
         physics.updateDebugger();
