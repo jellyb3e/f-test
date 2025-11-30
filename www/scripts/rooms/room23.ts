@@ -9,6 +9,7 @@ import { TextTexture, TextSprite } from '@enable3d/three-graphics/dist/flat';
 
 import * as Global from '../global';
 import * as ThreeUtils from '../threeUtils';
+import { switchScheme } from '../controls';
 
 export const Room23Scene = () => {
     // scene
@@ -33,7 +34,7 @@ export const Room23Scene = () => {
     const clock = new THREE.Clock();
 
     const initialize = () => {
-        Global.switchScheme("movement");
+        switchScheme("movement");
 
         scene.remove(player);
         physics.destroy(player);

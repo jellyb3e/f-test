@@ -1,19 +1,20 @@
 
 import * as Global from './global';
+import { delta, getInteract } from './controls';
 import { THREE, ExtendedMesh } from 'enable3d'
 import { AmmoPhysics } from '@enable3d/ammo-physics';
 import { ThreeGraphics } from '@enable3d/three-graphics';
 import { DrawSprite } from '@enable3d/three-graphics/dist/flat';
 
 export function movePlayer(player: ExtendedMesh) {
-    if (Global.delta.x == 0 && Global.delta.z == 0) {
+    if (delta.x == 0 && delta.z == 0) {
         player.body.setVelocity(0, 0, 0);
         return;
     }
 
-    const hypot = Math.hypot(Global.delta.x, Global.delta.z);
-    const delXNormalized = (Global.delta.x / hypot) * Global.MOVE_SPEED;
-    const delZNormalized = (Global.delta.z / hypot) * Global.MOVE_SPEED;
+    const hypot = Math.hypot(delta.x, delta.z);
+    const delXNormalized = (delta.x / hypot) * Global.MOVE_SPEED;
+    const delZNormalized = (delta.z / hypot) * Global.MOVE_SPEED;
 
     player.body.setVelocity(delXNormalized, 0, delZNormalized);
 }
@@ -62,24 +63,29 @@ export function makePlayer(physics: AmmoPhysics) {
 }
 
 // draw rectangle function for easy use in drawing inventory
-const drawRectangle = ctx => {
+const drawRectangle = (strokeStyle, fillStyle) => (ctx) => {
     const { width } = ctx.canvas;
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(42, 42, 42, 1)';
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.strokeStyle = strokeStyle;
+    ctx.fillStyle = fillStyle;
     ctx.lineWidth = 5;
     ctx.rect(0, 0, width, width);
     ctx.fill();
     ctx.stroke();
+};
+
+export function drawSlot(strokeStyle, fillStyle, i: number) {
+    const slot = new DrawSprite(Global.inventorySlotSize, Global.inventorySlotSize, drawRectangle(strokeStyle, fillStyle));
+    const inventoryPos = inventoryIndexToScreenPos(i);
+    slot.setPosition(inventoryPos.x, inventoryPos.y);
+    Global.scene2d.add(slot);
+    return slot;
 }
 
 // draw inventory to hud (scene2d) based on global parameters
 export function drawInventory() {
     for (let i = 0; i < Global.inventorySlots; i++) {
-        const inventorySlot = new DrawSprite(Global.inventorySlotSize, Global.inventorySlotSize, drawRectangle);
-        const inventoryPos = inventoryIndexToScreenPos(i);
-        inventorySlot.setPosition(inventoryPos.x, inventoryPos.y);
-        Global.scene2d.add(inventorySlot);
+        drawSlot('rgba(42, 42, 42, 1)', 'rgba(0,0,0,0.2)',i);
     }
 }
 
@@ -97,7 +103,7 @@ export function createCollectible(collectible: ExtendedMesh, physics: AmmoPhysic
     const trigger = physics.add.sphere({ x: 0, y: 0, z: 0, radius: radius, collisionFlags: 6 });
     trigger.visible = false;
     trigger.body.on.collision((other: any) => {
-        if (compareTag(other.userData.tag, Global.playerTag) && Global.getInteract() && !collected(collectible)) {
+        if (compareTag(other.userData.tag, Global.playerTag) && getInteract() && !collected(collectible)) {
             onCollect();
             addToInventory(collectible);
         }
@@ -121,10 +127,7 @@ export function addToInventory(collectible: ExtendedMesh) {
             collectible.position.z = -100;
             collectible.body.needUpdate = true;
 
-            const inventoryPos = inventoryIndexToScreenPos(i);
-            const inventorySlot = new DrawSprite(50, 50, drawRectangle);
-            inventorySlot.setPosition(inventoryPos.x, inventoryPos.y);
-            Global.scene2d.add(inventorySlot);
+            const item = drawSlot('rgba(42, 42, 42, 1)', 'rgba(0,0,0,0.2)',i);
             Global.INVENTORY[i] = "unga bunga";
             return;
         }
@@ -132,5 +135,15 @@ export function addToInventory(collectible: ExtendedMesh) {
 }
 
 function inventoryIndexToScreenPos(i: number) {
-    return { x: window.innerWidth - Global.slotOffset - (Global.inventorySlotSize / 2) - ((Global.inventorySlotSize + Global.slotOffset) * i), y: (Global.inventorySlotSize / 2) + Global.slotOffset };
+    const visualI = Global.inventorySlots-i - 1;
+    return { x: window.innerWidth - Global.slotOffset - (Global.inventorySlotSize / 2) - ((Global.inventorySlotSize + Global.slotOffset) * visualI), y: (Global.inventorySlotSize / 2) + Global.slotOffset };
+}
+
+// inventory selector (which item is selected)
+const inventorySelector = drawSlot('rgba(21, 58, 31, 1)', 'rgba(255, 255, 255, 0)',0);
+
+export function moveInventorySelector(i: number) {
+    // shifts from r->l inventory to l->r
+    const inventoryPos = inventoryIndexToScreenPos(i);
+    inventorySelector.setPosition(inventoryPos.x, inventoryPos.y);
 }
