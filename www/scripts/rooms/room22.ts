@@ -14,7 +14,7 @@ import { delta, switchScheme } from '../controls';
 export const Room22Scene = () => {
     // scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(Global.BACKGROUND_COLOR);
+    scene.background = new THREE.Color(Global.GROUND_COLOR);
 
     // light
     scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 1));

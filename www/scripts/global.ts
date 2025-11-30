@@ -34,16 +34,23 @@ export const inventorySlotSize = 100;
 export const inventorySlots = 3;
 export const slotOffset = 10;
 export const INVENTORY: (string | null)[] = Array(inventorySlots).fill(null);
+let holdingPuzzle = false;
 
 // SCENE HANDLING
 let currentSceneName: string = "";
+let lastSceneName: string = "";
 
 export function getCurrentScene() {
     return currentSceneName;
 }
 
 export function setCurrentScene(newSceneName: string) {
+    lastSceneName = currentSceneName;
     currentSceneName = newSceneName;
+}
+
+export function getLastScene() {
+    return lastSceneName;
 }
 
 // player position
@@ -58,3 +65,10 @@ export function setPlayerPosition(x: number, y: number, z: number) {
     playerPosition.set(x, y, z);
 }
 
+export function getHoldingPuzzle() {
+    return holdingPuzzle;
+}
+
+export function setHoldingPuzzle(value: boolean) {
+    holdingPuzzle = value;
+}

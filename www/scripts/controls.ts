@@ -1,5 +1,5 @@
 import * as Global from './global';
-import { moveInventorySelector } from './threeUtils';
+import { dropCurrentItem, moveInventorySelector } from './threeUtils';
 
 // control setup
 export const delta = { x: 0, z: 0, del: 1 };
@@ -15,6 +15,7 @@ export const switchScheme = (scheme: "rotation" | "movement") => {
     for (const key in keys) keys[key] = false;
     delta.x = 0;
     delta.z = 0;
+    interact = false;
 
     if (scheme == "rotation") {
         delta.del = Global.ROTATION_SPEED;
@@ -52,6 +53,17 @@ createKeybinding('s', () => delta.z += delta.del, () => delta.z -= delta.del);
 
 // pickup binding
 createKeybinding('e', () => { interact = true; }, () => { interact = false; });
+
+// drop binding
+createKeybinding('q', () => {
+    if (Global.getHoldingPuzzle()) {
+        Global.setHoldingPuzzle(false);
+        Global.setCurrentScene(Global.getLastScene());
+        return;
+    }
+
+    dropCurrentItem();
+});
 
 // inventory bindings
 for (let i = 1; i <= Global.inventorySlots; i++) {

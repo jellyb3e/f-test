@@ -141,17 +141,27 @@ function inventoryIndexToScreenPos(i: number) {
 
 // inventory selector (which item is selected)
 const inventorySelector = drawSlot('rgba(21, 58, 31, 1)', 'rgba(255, 255, 255, 0)', 0);
+let selectorIndex: number = 0;
 
 export function moveInventorySelector(i: number) {
     // shifts from r->l inventory to l->r
     const inventoryPos = inventoryIndexToScreenPos(i);
+    let selectorIndex = i;
     inventorySelector.setPosition(inventoryPos.x, inventoryPos.y);
 }
 
+export function dropCurrentItem() {
+    if (Global.INVENTORY[selectorIndex]) {
+        // TODO: REMOVE VISUAL
+        Global.INVENTORY[selectorIndex] = null;
+    }
+}
+
 export function makePuzzle(x: number, y: number, z: number, physics: AmmoPhysics) {
-    const puzzle = physics.add.box({ x: x, y: y, z: z, width: 1, depth: 1, height: .2 }, { lambert: { color: Global.PUZZLE_COLOR } });
+    const puzzle = physics.add.box({ x: x, y: y, z: z, width: 1.5, depth: 1.5, height: .3 }, { lambert: { color: Global.PUZZLE_COLOR } });
     const triggerUpdate = createCollectible(puzzle, physics, () => {
         Global.setCurrentScene("room22");
+        Global.setHoldingPuzzle(true);
     });
     return triggerUpdate;
 }
@@ -160,11 +170,11 @@ export function createHand(x: number, y: number, z: number, hand: "left" | "righ
     const dir = hand === "left" ? -1 : 1;
 
     const segments = [
-        { name: "thumb",   offsetX: 0,      offsetY: 0.25, offsetZ: 1.5,  length: 2,   rotationX: -Math.PI / 2, rotationZ: Math.PI / 3 * dir },
-        { name: "pointer", offsetX: 0.5,    offsetY: 0.5,  offsetZ: 0.25, length: 3,   rotationX: -Math.PI / 3, rotationZ: Math.PI / 10 * dir },
-        { name: "middle",  offsetX: 1.25,   offsetY: 0,    offsetZ: 0,    length: 3.5, rotationX: -Math.PI / 2, rotationZ: 0 },
-        { name: "pinky",   offsetX: 1.25,   offsetY: -1,   offsetZ: 0.25, length: 3,   rotationX: -2 * Math.PI / 3, rotationZ: 0 },
-        { name: "arm",     offsetX: 1,      offsetY: 0,    offsetZ: 6.75, length: 10,  rotationX: -Math.PI / 2, rotationZ: 0 },
+        { name: "thumb", offsetX: 0, offsetY: 0.25, offsetZ: 1.5, length: 2, rotationX: -Math.PI / 2, rotationZ: Math.PI / 3 * dir },
+        { name: "pointer", offsetX: 0.5, offsetY: 0.5, offsetZ: 0.25, length: 3, rotationX: -Math.PI / 3, rotationZ: Math.PI / 10 * dir },
+        { name: "middle", offsetX: 1.25, offsetY: 0, offsetZ: 0, length: 3.5, rotationX: -Math.PI / 2, rotationZ: 0 },
+        { name: "pinky", offsetX: 1.25, offsetY: -1, offsetZ: 0.25, length: 3, rotationX: -2 * Math.PI / 3, rotationZ: 0 },
+        { name: "arm", offsetX: 1, offsetY: 0, offsetZ: 6.75, length: 10, rotationX: -Math.PI / 2, rotationZ: 0 },
     ];
 
     for (const segment of segments) {
