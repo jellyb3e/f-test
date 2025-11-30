@@ -14,7 +14,7 @@ import { delta, switchScheme } from '../controls';
 export const Room22Scene = () => {
     // scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(Global.GROUND_COLOR);
+    scene.background = new THREE.Color(Global.BACKGROUND_COLOR);
 
     // light
     scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 1));
@@ -23,6 +23,8 @@ export const Room22Scene = () => {
     // physics
     const physics = new AmmoPhysics(scene as any);
     const { factory } = physics;
+
+    ThreeUtils.makeRoom(physics,5,0,-1,0);
 
     // static ground
     const ground = physics.add.box(
@@ -109,8 +111,8 @@ export const Room22Scene = () => {
         ground.rotation.z = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.z - delta.x));
     }
 
-    ThreeUtils.createHand(9.75, 2, 0, "right", ground, factory);
-    ThreeUtils.createHand(-9.75, 2, 0, "left", ground, factory);
+    ThreeUtils.createHand(9.75, 2, 5, "right", ground, factory);
+    ThreeUtils.createHand(-9.75, 2, 5, "left", ground, factory);
 
     // clock
     const clock = new THREE.Clock();

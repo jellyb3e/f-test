@@ -20,15 +20,17 @@ export function movePlayer(player: ExtendedMesh) {
     player.body.setVelocity(delXNormalized, 0, delZNormalized);
 }
 
-export function makeRoom(physics: AmmoPhysics) {
+export function makeRoom(physics: AmmoPhysics, scale: number = 1, x: number = 0, y: number = 0, z: number = 0) {
     // floor
-    physics.add.box({ x: 0, y: 0, z: 0, width: 20, height: 1, depth: 20, mass: 0 }, { lambert: { color: Global.GROUND_COLOR } }).body.setCollisionFlags(2);
+    physics.add.box({ x: x * scale, y: y * scale, z: z * scale, width: 20 * scale, height: 1 * scale, depth: 20 * scale, mass: 0 }, { lambert: { color: Global.GROUND_COLOR } }).body.setCollisionFlags(2);
     // walls
-    physics.add.box({ x: 10.5, y: 2, z: 0, width: 1, height: 5, depth: 22, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
-    physics.add.box({ x: -10.5, y: 2, z: 0, width: 1, height: 5, depth: 22, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
-    physics.add.box({ x: 0, y: 2, z: 10.5, width: 20, height: 5, depth: 1, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
-    physics.add.box({ x: 0, y: 2, z: -10.5, width: 20, height: 5, depth: 1, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
+    physics.add.box({ x: (x + 10.5) * scale, y: (y + 2) * scale, z: z * scale, width: 1 * scale, height: 5 * scale, depth: 22 * scale, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
+    physics.add.box({ x: (x - 10.5) * scale, y: (y + 2) * scale, z: z * scale, width: 1 * scale, height: 5 * scale, depth: 22 * scale, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
+    physics.add.box({ x: x * scale, y: (y + 2) * scale, z: (z + 10.5) * scale, width: 20 * scale, height: 5 * scale, depth: 1 * scale, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
+    physics.add.box({ x: x * scale, y: (y + 2) * scale, z: (z - 10.5) * scale, width: 20 * scale, height: 5 * scale, depth: 1 * scale, mass: 0 }, { lambert: { color: Global.WALL_COLOR } }).body.setCollisionFlags(2);
 }
+
+
 
 const doorOffset = 1;   // how far from door the player spawns (so scenes don't flicker forever)
 // clamp one axis value (x,y,z) of player pos when going through doors
@@ -38,7 +40,7 @@ function clampDoorPos(num: number) {
 
 // door creation function
 export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string, locked: boolean = false) {
-    const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 }, { lambert: { color: (locked) ? Global.LOCKED_COLOR: Global.DOOR_COLOR } });
+    const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 }, { lambert: { color: (locked) ? Global.LOCKED_COLOR : Global.DOOR_COLOR } });
     door.body.setCollisionFlags(2);
     door.userData.locked = locked;
     door.rotation.y = rotation * (Math.PI / 180);
