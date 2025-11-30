@@ -37,8 +37,8 @@ function clampDoorPos(num: number) {
 }
 
 // door creation function
-export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string, locked: boolean = false, color: number = Global.DOOR_COLOR) {
-    const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 }, { lambert: { color: color } });
+export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string, locked: boolean = false) {
+    const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 }, { lambert: { color: (locked) ? Global.LOCKED_COLOR: Global.DOOR_COLOR } });
     door.body.setCollisionFlags(2);
     door.userData.locked = locked;
     door.rotation.y = rotation * (Math.PI / 180);
