@@ -1,5 +1,21 @@
 # 121-Final-Project
 
+## Devlog Entry - 1 December 2025
+
+### How we satisfied the software requirements
+
+1. We are still developing our game with Three and AmmoPhysics
+2. The player can change scenes by going through doors
+3. The player can interact with items with E, drop with Q, and use with R
+4. We have persistent inventory across scenes (rooms). The puzzle key must be taken to the other room to unlock the door to escape.
+5. Our puzzle is a physical puzzle where you have to rotate it with WASD to get a ball out. The ball is the key to a door.
+6. Technically, the player can only fail by giving up, but success is marked by the release of the ball that the player can then pick up.
+7. The ending is triggered by unlocking the door to room 12.
+
+### Reflection
+
+Our game's design hasn't changed, but the inner structure of the code has necessarily changed a lot due to difficulty handling scene changes. Our solution was to create a custom scene handler (master.ts) that maintains a list of the game's scenes.
+
 ## Devlog Entry - 21 November 2025
 
 ### How we satisfied the software requirements
