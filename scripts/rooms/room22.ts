@@ -2,15 +2,11 @@
 import * as THREE from 'three';
 
 // physics
-import { AmmoPhysics, ExtendedMesh } from '@enable3d/ammo-physics';
-
-// flat
-import { TextTexture, TextSprite } from '@enable3d/three-graphics/dist/flat';
+import { AmmoPhysics } from '@enable3d/ammo-physics';
 
 import * as Global from '../global';
 import * as ThreeUtils from '../threeUtils';
-import { delta, switchScheme } from '../controls';
-import { ICONS } from '../icons';
+import { switchScheme } from '../controls';
 
 export const Room22Scene = () => {
     // scene
@@ -26,97 +22,11 @@ export const Room22Scene = () => {
     const { factory } = physics;
 
     ThreeUtils.makeRoom(physics, 5, 0, -1.5, 0);
-
-    // static ground
-    const ground = physics.add.box(
-        {
-            x: 0,
-            y: 0,
-            z: 0,
-            width: 20,
-            height: 1,
-            depth: 20,
-            collisionFlags: 2
-        },
-        {
-            lambert: { color: Global.PUZZLE_COLOR }
-        }
-    );
-
-    // invisible ceiling
-    const ceiling = physics.add.box(
-        {
-            x: 0,
-            y: 2.25,
-            z: 0,
-            width: 20,
-            height: 1,
-            depth: 20,
-            collisionFlags: 2
-        }
-    );
-    ceiling.visible = false;
-    ground.add(ceiling);
-    /*
-    const mazeMap: number[] =
-        [
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1,
-            1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1,
-            1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-            1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1,
-            1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-            1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1,
-            1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1,
-            1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-        ]
-
-    const maze: ExtendedMesh[] = [];
-    for (let i: number = 0; i < 16; i++) {
-        for (let j: number = 0; j < 16; j++) {
-            if (mazeMap[j * 16 + i] == 1) {
-                const newCell = physics.add.box(
-                    {
-                        x: i * 1.25 - 9.375,
-                        y: 1,
-                        z: j * 1.25 - 9.375,
-                        width: 1.25,
-                        height: 1,
-                        depth: 1.25,
-                        collisionFlags: 2
-                    },
-                    {
-                        lambert: { color: Global.PUZZLE_WALL_COLOR },
-                        mass: 1
-                    }
-                );
-                maze.push(newCell);
-                ground.add(newCell);
-            }
-        }
-    }
-    */
-
-    const updateRotation = () => {
-        // rotate ground and arms
-        ground.rotation.x = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.x + delta.z));
-        ground.rotation.z = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.z - delta.x));
-    }
-
-    ThreeUtils.createHand(9.75, 2, 5, "right", ground, factory);
-    ThreeUtils.createHand(-9.75, 2, 5, "left", ground, factory);
+    const puzzleUpdate = ThreeUtils.makePuzzle(physics, factory);
 
     const collectibles: Global.collectible[] = [
-        ThreeUtils.createKey(0, 1.2, 0, physics)    // yellow ball
+        ThreeUtils.makeKey(0, 1.2, 0, physics)    // yellow ball
     ];
-    ThreeUtils.makePuzzleSolveTrigger(physics);
 
     // clock
     const clock = new THREE.Clock();
@@ -128,16 +38,7 @@ export const Room22Scene = () => {
 
     const sceneUpdate = () => {
         const deltaTime = clock.getDelta() * 1000;
-
-        updateRotation();
-        ground.body.needUpdate = true;
-        ceiling.body.needUpdate = true;
-        /*
-        maze.forEach((cell: ExtendedMesh) => {
-            cell.body.needUpdate = true;
-        });
-        */
-
+        puzzleUpdate();
         physics.update(deltaTime);
         physics.updateDebugger();
     }

@@ -4,9 +4,6 @@ import * as THREE from 'three';
 // physics
 import { AmmoPhysics, ExtendedMesh } from '@enable3d/ammo-physics';
 
-// flat
-import { TextTexture, TextSprite } from '@enable3d/three-graphics/dist/flat';
-
 import * as Global from '../global';
 import * as ThreeUtils from '../threeUtils';
 import { switchScheme } from '../controls';
@@ -22,9 +19,8 @@ export const Room23Scene = () => {
 
     // physics
     const physics = new AmmoPhysics(scene as any);
-    const { factory } = physics;
     const collectibles: Global.collectible[] = [
-        ThreeUtils.makePuzzle(3, 1, 3, physics)
+        ThreeUtils.makePuzzleCollectible(3, 1, 3, physics)
     ];
 
     // PLAYER

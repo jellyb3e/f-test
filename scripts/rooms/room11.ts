@@ -4,9 +4,6 @@ import * as THREE from 'three';
 // physics
 import { AmmoPhysics, ExtendedMesh } from '@enable3d/ammo-physics';
 
-// flat
-import { TextTexture, TextSprite, DrawSprite } from '@enable3d/three-graphics/dist/flat';
-
 import * as Global from '../global';
 import * as ThreeUtils from '../threeUtils';
 import { switchScheme } from '../controls';
@@ -25,7 +22,7 @@ export const Room11Scene = () => {
     const physics = new AmmoPhysics(scene as any);
     const { factory } = physics;
     const collectibles: Global.collectible[] = [
-        ThreeUtils.createCollectible(
+        ThreeUtils.makeCollectible(
             "Ball",
             ICONS.ball.draw(),
             physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } }),

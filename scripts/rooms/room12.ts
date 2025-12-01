@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 
 // physics
-import { AmmoPhysics, ExtendedMesh } from '@enable3d/ammo-physics';
+import { AmmoPhysics } from '@enable3d/ammo-physics';
 
 import * as Global from '../global';
 import * as ThreeUtils from '../threeUtils';
@@ -39,15 +39,15 @@ export const Room12Scene = () => {
     }
 
     const sceneUpdate = () => {
-        const delta = clock.getDelta() * 1000;
+        const deltaTime = clock.getDelta() * 1000;
 
         // move the player in a circle independent of player input
-        angle += delta * speed;
+        angle += deltaTime * speed;
         player.position.x = Math.cos(angle) * radius;
         player.position.z = Math.sin(angle) * radius;
         player.body.needUpdate = true;
 
-        physics.update(delta);
+        physics.update(deltaTime);
         physics.updateDebugger();
     }
     return { scene, sceneUpdate, initialize, physics, collectibles } as Global.sceneType;

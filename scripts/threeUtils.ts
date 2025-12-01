@@ -3,10 +3,11 @@ import * as Global from './global';
 import * as Inventory from './inventoryUtils';
 import { ICONS } from './icons';
 import { delta, getInteract, getUse } from './controls';
-import { ExtendedMesh, THREE } from 'enable3d'
+import { ExtendedMesh } from 'enable3d'
 import { AmmoPhysics } from '@enable3d/ammo-physics';
 import { DrawSprite, TextSprite, TextTexture } from '@enable3d/three-graphics/dist/flat';
 import Factories from '@enable3d/common/dist/factories';
+import { mazeMap } from './mazeconfig';
 
 // functions
 export function movePlayer(player: ExtendedMesh) {
@@ -67,7 +68,7 @@ export function makeDoor(x: number, y: number, z: number, rotation: number, phys
 
 function setDoorLock(door: ExtendedMesh, value: boolean) {
     door.material = (value) ? Global.lockedDoorMat : Global.unlockedDoorMat;
-    setTimeout(() => { door.userData.locked = value }, 2000);
+    setTimeout(() => { door.userData.locked = value }, 500);
 }
 
 function tryUnlockDoor(door: ExtendedMesh) {
@@ -97,7 +98,7 @@ function collected(collectible: ExtendedMesh) {
     return collectible.userData.collected;
 }
 
-export function createCollectible(
+export function makeCollectible(
     name: string,
     icon: DrawSprite,
     object: ExtendedMesh,
@@ -135,8 +136,8 @@ export function createCollectible(
     return collectible;
 }
 
-export function createKey(x: number, y: number, z: number, physics: AmmoPhysics) {
-    const key = createCollectible(
+export function makeKey(x: number, y: number, z: number, physics: AmmoPhysics) {
+    const key = makeCollectible(
         "Key",
         ICONS.ball.draw(),
         physics.add.sphere({ x: x, y: y, z: z, radius: 0.4 }, { lambert: { color: Global.YELLOW } }),
@@ -154,7 +155,7 @@ export function makeTrigger(physics: AmmoPhysics) {
     return trigger;
 }
 
-export function makePuzzleSolveTrigger(physics: AmmoPhysics) {
+function makePuzzleSolveTrigger(physics: AmmoPhysics) {
     const floorTrigger = physics.add.box(
         {
             x: 0,
@@ -176,16 +177,66 @@ export function makePuzzleSolveTrigger(physics: AmmoPhysics) {
     });
 }
 
-export function makePuzzle(x: number, y: number, z: number, physics: AmmoPhysics) {
+export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
+    const ground = physics.add.box({ x: 0, y: 0, z: 0, width: 20, height: 1, depth: 20, collisionFlags: 2 }, { lambert: { color: Global.PUZZLE_COLOR } });
+    const ceiling = physics.add.box({ x: 0, y: 2.25, z: 0, width: 20, height: 1, depth: 20, collisionFlags: 2 });
+    ceiling.visible = false;
+    ground.add(ceiling);
+
+    const maze: ExtendedMesh[] = [];
+    for (let i: number = 0; i < 16; i++) {
+        for (let j: number = 0; j < 16; j++) {
+            if (mazeMap[j * 16 + i] == 1) {
+                const newCell = physics.add.box(
+                    {
+                        x: i * 1.25 - 9.375,
+                        y: 1,
+                        z: j * 1.25 - 9.375,
+                        width: 1.25,
+                        height: 1,
+                        depth: 1.25,
+                        collisionFlags: 2
+                    },
+                    {
+                        lambert: { color: Global.PUZZLE_WALL_COLOR },
+                        mass: 1
+                    }
+                );
+                maze.push(newCell);
+                ground.add(newCell);
+            }
+        }
+    }
+
+    makeHand(9.75, 2, 5, "right", ground, factory);
+    makeHand(-9.75, 2, 5, "left", ground, factory);
+    makePuzzleSolveTrigger(physics);
+
+    const updateRotation = () => {
+        // rotate maze and arms
+        ground.rotation.x = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.x + delta.z));
+        ground.rotation.z = Math.max(-Global.MAX_ROTATION, Math.min(Global.MAX_ROTATION, ground.rotation.z - delta.x));
+
+        ground.body.needUpdate = true;
+        ceiling.body.needUpdate = true;
+        maze.forEach((cell: ExtendedMesh) => {
+            cell.body.needUpdate = true;
+        });
+    }
+
+    return updateRotation;
+}
+
+export function makePuzzleCollectible(x: number, y: number, z: number, physics: AmmoPhysics) {
     const puzzle = physics.add.box({ x: x, y: y, z: z, width: 1.5, depth: 1.5, height: .3 }, { lambert: { color: Global.PUZZLE_COLOR } });
-    const collectible = createCollectible("Puzzle", ICONS.puzzle.draw(), puzzle, physics, () => {
+    const collectible = makeCollectible("Puzzle", ICONS.puzzle.draw(), puzzle, physics, () => {
         Global.setCurrentScene("room22");
         Global.setHoldingPuzzle(true);
     });
     return collectible;
 }
 
-export function createHand(x: number, y: number, z: number, hand: "left" | "right", ground: ExtendedMesh, factory: Factories) {
+export function makeHand(x: number, y: number, z: number, hand: "left" | "right", ground: ExtendedMesh, factory: Factories) {
     const dir = hand === "left" ? -1 : 1;
 
     const segments = [
