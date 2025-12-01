@@ -1,6 +1,6 @@
 
 import * as Global from './global';
-import { ohexToRGBA, ICONS } from './icons';
+import { ICONS } from './icons';
 import { delta, getInteract } from './controls';
 import { ExtendedMesh, THREE } from 'enable3d'
 import { AmmoPhysics } from '@enable3d/ammo-physics';
@@ -95,7 +95,7 @@ export function drawInventory() {
     }
 }
 
-function compareTag(tag: string, otherTag: string) {
+export function compareTag(tag: string, otherTag: string) {
     return tag == otherTag;
 }
 
@@ -135,6 +135,19 @@ export function createCollectible(
     return collectible;
 }
 
+export function createKey(x: number, y: number, z: number, physics: AmmoPhysics) {
+    const key = createCollectible(
+        "Ball",
+        ICONS.ball.draw(),
+        physics.add.sphere({ x: x, y: y, z: z, radius: 0.4 }, { lambert: { color: Global.YELLOW } }),
+        physics,
+        () => { Global.setHasKey(true); }
+    );
+    key.object.userData.tag = Global.keyTag;
+    key.object.userData.parent = key;
+    return key;
+}
+
 function bindTriggerCollision(collectible: Global.collectible) {
     collectible.trigger.body.on.collision(collectible.collisionCallback);
 }
@@ -144,7 +157,6 @@ function addToInventory(collectible: Global.collectible) {
         if (Global.INVENTORY[i] == null && !collectible.object.userData.collected) {
             setActive3D(collectible, false);
             setActive2D(collectible.icon, true, i);
-            removeFromSceneCollectibles(collectible);
 
             Global.INVENTORY[i] = collectible;
             return;
@@ -158,8 +170,34 @@ function makeTrigger(physics: AmmoPhysics) {
     return trigger;
 }
 
-function removeFromSceneCollectibles(collectible: Global.collectible) {
-    const collectibles = Global.getCurrentScene().collectibles;
+export function makePuzzleSolveTrigger(physics: AmmoPhysics) {
+    const floorTrigger = physics.add.box(
+        {
+            x: 0,
+            y: -5,
+            z: 0,
+            width: 100,
+            height: 1,
+            depth: 100,
+            collisionFlags: 6
+        }
+    );
+    floorTrigger.visible = false;
+    floorTrigger.body.on.collision((other: any) => {
+        if (compareTag(other.userData.tag, Global.keyTag)) {
+            const keyCollectible = other.userData.parent;
+            setActive3D(keyCollectible, false);
+            setActive3D(keyCollectible, true, true, Global.getLastScene());
+        }
+    });
+}
+
+function AddToSceneCollectibles(collectible: Global.collectible, scene: Global.sceneType = Global.getCurrentScene()) {
+    scene.collectibles.push(collectible);
+}
+
+function removeFromSceneCollectibles(collectible: Global.collectible, scene: Global.sceneType = Global.getCurrentScene()) {
+    const collectibles = scene.collectibles;
     const index = collectibles.findIndex(item => item.name === collectible.name);
 
     if (index !== -1) {
@@ -197,16 +235,16 @@ export function dropCurrentItem() {
     }
     setActive3D(selectorItem, true);
     setActive2D(selectorItem.icon, false);
-    Global.getCurrentScene().collectibles.push(selectorItem);
+    AddToSceneCollectibles(selectorItem);
     Global.INVENTORY[selectorIndex] = null;
 }
 
-function setActive3D(collectible: Global.collectible, value: boolean) {
+export function setActive3D(collectible: Global.collectible, value: boolean, playerY: boolean = false, scene: Global.sceneType = Global.getCurrentScene()) {
     const object = collectible.object;
-    const scene = Global.getCurrentScene();
 
     object.userData.collected = !value;
     if (!value) {
+        removeFromSceneCollectibles(collectible, scene);
         scene.scene.remove(object);
         scene.physics.destroy(object);
         scene.scene.remove(collectible.trigger);
@@ -216,6 +254,7 @@ function setActive3D(collectible: Global.collectible, value: boolean) {
 
     const dropPos = getDropPosition();
     object.position.x = dropPos.x;
+    if (playerY) object.position.y = Global.getPlayerPosition().y;
     object.position.z = dropPos.y;
 
     scene.physics.add.existing(object);
@@ -224,6 +263,7 @@ function setActive3D(collectible: Global.collectible, value: boolean) {
     collectible.trigger = makeTrigger(scene.physics);
     scene.scene.add(collectible.trigger);
     bindTriggerCollision(collectible);
+    AddToSceneCollectibles(collectible, scene);
 
     object.body.needUpdate = true;
 }

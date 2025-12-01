@@ -46,6 +46,7 @@ export const INVENTORY_SELECTOR_COLOR = 0x153a1f;
 // tags
 export const playerTag = "player";
 export const collectibleTag = "collectible";
+export const keyTag = "key";
 
 // tunable gameplay values
 export const MOVE_SPEED = 3;
@@ -57,7 +58,8 @@ export const inventorySlotSize = 100;
 export const inventorySlots = 3;
 export const slotOffset = 10;
 export const INVENTORY: (collectible | null)[] = Array(inventorySlots).fill(null);
-let holdingPuzzle = false;
+let holdingPuzzle: boolean = false;
+let hasKey: boolean = false;
 
 // SCENE HANDLING
 let currentScene: sceneType;
@@ -72,6 +74,10 @@ export function setCurrentScene(newSceneName: string) {
     lastScene = currentScene;
     currentScene = scenes[newSceneName];
     currentScene.initialize();
+}
+
+export function getLastScene() {
+    return lastScene;
 }
 
 export function goToLastScene() {
@@ -103,4 +109,13 @@ export function getHoldingPuzzle() {
 
 export function setHoldingPuzzle(value: boolean) {
     holdingPuzzle = value;
+}
+
+export function getHasKey() {
+    return hasKey;
+}
+
+export function setHasKey(value: boolean) {
+    console.log("setting")
+    hasKey = value;
 }

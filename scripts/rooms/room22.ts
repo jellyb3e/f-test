@@ -10,6 +10,7 @@ import { TextTexture, TextSprite } from '@enable3d/three-graphics/dist/flat';
 import * as Global from '../global';
 import * as ThreeUtils from '../threeUtils';
 import { delta, switchScheme } from '../controls';
+import { ICONS } from '../icons';
 
 export const Room22Scene = () => {
     // scene
@@ -23,7 +24,6 @@ export const Room22Scene = () => {
     // physics
     const physics = new AmmoPhysics(scene as any);
     const { factory } = physics;
-    const collectibles: Global.collectible[] = [];
 
     ThreeUtils.makeRoom(physics, 5, 0, -1.5, 0);
 
@@ -57,7 +57,7 @@ export const Room22Scene = () => {
     );
     ceiling.visible = false;
     ground.add(ceiling);
-
+    /*
     const mazeMap: number[] =
         [
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -102,9 +102,7 @@ export const Room22Scene = () => {
             }
         }
     }
-
-    // rolling ball
-    let ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } });
+    */
 
     const updateRotation = () => {
         // rotate ground and arms
@@ -114,6 +112,11 @@ export const Room22Scene = () => {
 
     ThreeUtils.createHand(9.75, 2, 5, "right", ground, factory);
     ThreeUtils.createHand(-9.75, 2, 5, "left", ground, factory);
+
+    const collectibles: Global.collectible[] = [
+        ThreeUtils.createKey(0, 1.2, 0, physics)    // yellow ball
+    ];
+    ThreeUtils.makePuzzleSolveTrigger(physics);
 
     // clock
     const clock = new THREE.Clock();
@@ -128,9 +131,11 @@ export const Room22Scene = () => {
         updateRotation();
         ground.body.needUpdate = true;
         ceiling.body.needUpdate = true;
+        /*
         maze.forEach((cell: ExtendedMesh) => {
             cell.body.needUpdate = true;
         });
+        */
 
         physics.update(deltaTime);
         physics.updateDebugger();
