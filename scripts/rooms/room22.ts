@@ -134,5 +134,5 @@ export const Room22Scene = () => {
         physics.update(deltaTime);
         physics.updateDebugger();
     }
-    return { scene, sceneUpdate, initialize };
+    return { scene, sceneUpdate, initialize, physics };
 }

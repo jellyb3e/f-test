@@ -36,7 +36,7 @@ export const Room11Scene = () => {
     const ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } });
     const ballCollectible = ThreeUtils.createCollectible(
         "Ball",
-        ICONS.puzzle.draw(),
+        ICONS.ball.draw(),
         ball,
         physics
     );
@@ -59,5 +59,5 @@ export const Room11Scene = () => {
         physics.update(clock.getDelta() * 1000);
         physics.updateDebugger();
     }
-    return { scene, sceneUpdate, initialize } as Global.sceneType;
+    return { scene, sceneUpdate, initialize, physics } as Global.sceneType;
 }

@@ -49,5 +49,5 @@ export const Room23Scene = () => {
         physics.update(clock.getDelta() * 1000);
         physics.updateDebugger();
     }
-    return { scene, sceneUpdate, initialize };
+    return { scene, sceneUpdate, initialize, physics };
 }

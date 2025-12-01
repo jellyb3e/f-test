@@ -9,6 +9,8 @@ import Factories from '@enable3d/common/dist/factories';
 
 // functions
 export function movePlayer(player: ExtendedMesh) {
+    Global.setPlayerPosition(player.position.x, player.position.y, player.position.z);
+
     if (delta.x == 0 && delta.z == 0) {
         player.body.setVelocity(0, 0, 0);
         return;
@@ -19,7 +21,6 @@ export function movePlayer(player: ExtendedMesh) {
     const delZNormalized = (delta.z / hypot) * Global.MOVE_SPEED;
 
     player.body.setVelocity(delXNormalized, 0, delZNormalized);
-    Global.setPlayerPosition(player.position.x, player.position.y, player.position.z);
 }
 
 export function makeRoom(physics: AmmoPhysics, scale: number = 1, x: number = 0, y: number = 0, z: number = 0) {
@@ -117,8 +118,8 @@ export function createCollectible(name: string, icon: DrawSprite, object: Extend
 
     trigger.body.on.collision((other: any) => {
         if (compareTag(other.userData.tag, Global.playerTag) && getInteract() && !collected(object)) {
-            onCollect();
             addToInventory(collectible);
+            onCollect();
         }
     });
 
@@ -127,7 +128,7 @@ export function createCollectible(name: string, icon: DrawSprite, object: Extend
 
 export function addToInventory(collectible: Global.collectible) {
     for (let i = 0; i < Global.inventorySlots; i++) {
-        if (Global.INVENTORY[i] == null) {
+        if (Global.INVENTORY[i] == null && !collectible.object.userData.collected) {
             setActive3D(collectible.object, false);
             setActive2D(collectible.icon, true, i);
 
@@ -172,15 +173,18 @@ export function dropCurrentItem() {
 
 function setActive3D(object: ExtendedMesh, value: boolean) {
     object.userData.collected = !value;
-    object.visible = value;
-    object.body.setCollisionFlags((value) ? 0 : 5);
+    if (!value) {
+        Global.getCurrentScene().scene.remove(object);
+        Global.getCurrentScene().physics.destroy(object);
+        return;
+    }
+    object.position.x = Global.getPlayerPosition().x;
+    object.position.z = Global.getPlayerPosition().z;
 
-    object.position.x = (value) ? Global.getPlayerPosition().x : -100;
-    object.position.z = (value) ? Global.getPlayerPosition().z : -100;
+    Global.getCurrentScene().physics.add.existing(object);
+    Global.getCurrentScene().scene.add(object);
 
     object.body.needUpdate = true;
-    if (value) { Global.getCurrentScene().scene.add(object); }
-    else { Global.getCurrentScene().scene.remove(object); }
 }
 
 function setActive2D(icon: DrawSprite, active: boolean, i: number = 0) {

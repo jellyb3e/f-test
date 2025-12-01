@@ -1,3 +1,4 @@
+import { AmmoPhysics } from '@enable3d/ammo-physics';
 import { DrawSprite } from '@enable3d/three-graphics/dist/flat';
 import { ExtendedMesh } from 'enable3d';
 import * as THREE from 'three';
@@ -13,6 +14,7 @@ export type sceneType = {
     scene: THREE.Scene,
     sceneUpdate: () => void,
     initialize: () => void,
+    physics: AmmoPhysics,
     collectibles: collectible[]
 }
 

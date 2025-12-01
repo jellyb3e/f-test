@@ -11,7 +11,10 @@ export const ICONS = {
         draw: () => { return new DrawSprite(Global.inventorySlotSize, Global.inventorySlotSize, drawRectangle(ohexToRGBA(Global.INVENTORY_SELECTOR_COLOR), "")); }
     },
     "puzzle": {
-        draw: () => { return new DrawSprite(Global.inventorySlotSize/2, Global.inventorySlotSize/2, drawRectangle("", ohexToRGBA(Global.PUZZLE_COLOR))); }
+        draw: () => { return new DrawSprite(Global.inventorySlotSize / 2, Global.inventorySlotSize / 2, drawRectangle("", ohexToRGBA(Global.PUZZLE_COLOR))); }
+    },
+    "ball": {
+        draw: () => { return new DrawSprite(Global.inventorySlotSize / 2, Global.inventorySlotSize / 2, drawCircle("", ohexToRGBA(Global.YELLOW))); }
     }
 }
 
@@ -20,12 +23,27 @@ export const ICONS = {
 const drawRectangle = (strokeStyle: string, fillStyle: string) => (ctx) => {
     const { width } = ctx.canvas;
     ctx.beginPath();
-    ctx.strokeStyle = (strokeStyle !== "") ? strokeStyle : 'rgba(0,0,0,0)';
-    ctx.fillStyle = (fillStyle !== "") ? fillStyle : 'rgba(0,0,0,0)';
+    ctx.strokeStyle = strokeStyle;
+    ctx.fillStyle = fillStyle;
     ctx.lineWidth = 5;
     ctx.rect(0, 0, width, width);
-    ctx.fill();
-    ctx.stroke();
+    if (fillStyle) ctx.fill();
+    if (strokeStyle) ctx.stroke();
+};
+
+const drawCircle = (strokeStyle: string, fillStyle: string) => (ctx) => {
+    const { width } = ctx.canvas;
+    const radius = width / 2;
+
+    ctx.beginPath();
+    ctx.strokeStyle = strokeStyle;
+    ctx.fillStyle = fillStyle;
+    ctx.lineWidth = 5;
+
+    ctx.arc(radius, radius, radius - ctx.lineWidth, 0, Math.PI * 2);
+
+    if (fillStyle) ctx.fill();
+    if (strokeStyle) ctx.stroke();
 };
 
 // 0x to rgba color notation
