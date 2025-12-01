@@ -24,6 +24,14 @@ export const Room11Scene = () => {
     // physics
     const physics = new AmmoPhysics(scene as any);
     const { factory } = physics;
+    const collectibles: Global.collectible[] = [
+        ThreeUtils.createCollectible(
+            "Ball",
+            ICONS.ball.draw(),
+            physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } }),
+            physics
+        )
+    ];
 
     // PLAYER
     let player: ExtendedMesh = ThreeUtils.makePlayer(physics);
@@ -32,14 +40,6 @@ export const Room11Scene = () => {
     ThreeUtils.makeDoor(10, 2, 0, 0, physics, "room23");
     // EXIT DOOR
     ThreeUtils.makeDoor(0, 2, -10, 90, physics, "room23", true);
-
-    const ball = physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } });
-    const ballCollectible = ThreeUtils.createCollectible(
-        "Ball",
-        ICONS.ball.draw(),
-        ball,
-        physics
-    );
 
     // clock
     const clock = new THREE.Clock();
@@ -54,10 +54,9 @@ export const Room11Scene = () => {
 
     const sceneUpdate = () => {
         ThreeUtils.movePlayer(player);
-        ballCollectible.triggerUpdate();
 
         physics.update(clock.getDelta() * 1000);
         physics.updateDebugger();
     }
-    return { scene, sceneUpdate, initialize, physics } as Global.sceneType;
+    return { scene, sceneUpdate, initialize, physics, collectibles } as Global.sceneType;
 }

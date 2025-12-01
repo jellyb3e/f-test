@@ -23,13 +23,15 @@ export const Room23Scene = () => {
     // physics
     const physics = new AmmoPhysics(scene as any);
     const { factory } = physics;
+    const collectibles: Global.collectible[] = [
+        ThreeUtils.makePuzzle(3, 1, 3, physics)
+    ];
 
     // PLAYER
     let player: ExtendedMesh = ThreeUtils.makePlayer(physics);
 
     ThreeUtils.makeRoom(physics);
     ThreeUtils.makeDoor(-10, 2, 0, 0, physics, "room11");
-    const puzzle = ThreeUtils.makePuzzle(3, 0, 3, physics);
 
     // clock
     const clock = new THREE.Clock();
@@ -44,10 +46,9 @@ export const Room23Scene = () => {
 
     const sceneUpdate = () => {
         ThreeUtils.movePlayer(player);
-        puzzle.triggerUpdate();
 
         physics.update(clock.getDelta() * 1000);
         physics.updateDebugger();
     }
-    return { scene, sceneUpdate, initialize, physics };
+    return { scene, sceneUpdate, initialize, physics, collectibles };
 }

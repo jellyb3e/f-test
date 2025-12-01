@@ -23,6 +23,7 @@ export const Room22Scene = () => {
     // physics
     const physics = new AmmoPhysics(scene as any);
     const { factory } = physics;
+    const collectibles: Global.collectible[] = [];
 
     ThreeUtils.makeRoom(physics, 5, 0, -1.5, 0);
 
@@ -134,5 +135,5 @@ export const Room22Scene = () => {
         physics.update(deltaTime);
         physics.updateDebugger();
     }
-    return { scene, sceneUpdate, initialize, physics };
+    return { scene, sceneUpdate, initialize, physics, collectibles };
 }

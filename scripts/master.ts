@@ -41,6 +41,9 @@ const MasterScene = () => {
     // loop
     const animate = () => {
         Global.getCurrentScene().sceneUpdate();
+        for (let collectible of Global.getCurrentScene().collectibles) {
+            collectible.triggerUpdate();
+        }
 
         // you have to clear and call render twice because there are 2 scenes
         // one 3d scene and one 2d scene
