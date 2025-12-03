@@ -3,7 +3,7 @@ import * as Global from './global';
 import * as Inventory from './inventoryUtils';
 import { ICONS } from './icons';
 import { delta, getInteract, getUse } from './controls';
-import { ExtendedMesh } from 'enable3d'
+import { ExtendedMesh, FLAT } from 'enable3d'
 import { AmmoPhysics } from '@enable3d/ammo-physics';
 import { DrawSprite, TextSprite, TextTexture } from '@enable3d/three-graphics/dist/flat';
 import Factories from '@enable3d/common/dist/factories';
@@ -42,12 +42,18 @@ function clampDoorPos(num: number) {
 }
 
 // door creation function
-export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string, locked: boolean = false) {
+export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string, locked: boolean = false, label: string = "") {
     const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 });
     setDoorLock(door, locked);
     door.body.setCollisionFlags(2);
     door.rotation.y = rotation * (Math.PI / 180);
     door.body.needUpdate = true;
+
+    const labelTexture = new FLAT.TextTexture(label);
+    const labelSprite = new FLAT.TextSprite(labelTexture);
+    labelSprite.setScale(0.02);
+    labelSprite.setPosition(-2, 1);
+    door.add(labelSprite);
 
     door.body.on.collision((other: any) => {
         if (compareTag(other, Global.playerTag)) {
@@ -267,6 +273,22 @@ export function makeHand(x: number, y: number, z: number, hand: "left" | "right"
 
         ground.add(capsule);
     }
+}
+
+export function makeLabel(
+    factory: Factories,
+    label: string,
+    scale: number = 0.05,
+    x: number = 0,
+    y: number = 0,
+    z: number = 0) {
+
+    const labelTexture = new TextTexture(label);
+    const spriteTexture = new TextSprite(labelTexture);
+    spriteTexture.setScale(scale);
+    spriteTexture.position.set(x, y, z);
+    factory.add.existing(spriteTexture);
+
 }
 
 export function drawEndScene() {
