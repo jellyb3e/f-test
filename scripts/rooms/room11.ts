@@ -26,6 +26,8 @@ export const Room11Scene = () => {
             "Ball",
             ICONS.ball.draw(),
             physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } }),
+            1,
+            1,
             physics
         )
     ];
