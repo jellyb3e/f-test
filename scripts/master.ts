@@ -7,6 +7,7 @@ import { PhysicsLoader } from '@enable3d/ammo-physics';
 
 import * as Global from './global';
 import * as ThreeUtils from './threeUtils';
+import { Room00Scene } from './rooms/room00';
 import { Room11Scene } from './rooms/room11';
 import { Room12Scene } from './rooms/room12';
 import { Room22Scene } from './rooms/room22';
@@ -59,12 +60,13 @@ const MasterScene = () => {
 
 PhysicsLoader('ammo', () => {
     Global.addScenes({
+        'room00': Room00Scene(),
         'room11': Room11Scene(),
         'room12': Room12Scene(),
         'room22': Room22Scene(),
         'room23': Room23Scene()
     });
 
-    Global.setCurrentScene("room11");
+    Global.setCurrentScene("room00");
     MasterScene();
 });
