@@ -341,12 +341,12 @@ function tryConsume(foodItem: Global.collectible) {
 }
 
 // updates a collectible's label based on selected language 
-export function translateLabel(collectible: Global.collectible) {
-    const newLabelText = Utils.getTranslatedText(collectible.name);
+export function updateLabel(collectible: Global.collectible, newText: string = "") {
+    const newLabelText = (newText == "") ? Utils.getTranslatedText(collectible.name) : newText;
 
     const labelTexture = new TextTexture(newLabelText, { fontSize: 24, fillStyle: "black" });
     const label = new TextSprite(labelTexture);
     label.renderOrder = 1;
 
-    collectible.label = label;
+    return label;
 }
