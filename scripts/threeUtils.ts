@@ -126,8 +126,7 @@ export function makeCollectible(
     object.userData.tag = Global.collectibleTag;
     object.userData.collected = false;
 
-    const translatedName = Utils.getTranslatedText(name);
-    const labelTexture = new TextTexture(translatedName, { fontSize: 24, fillStyle: "black" });
+    const labelTexture = new TextTexture(name, { fontSize: 24, fillStyle: "black" });
     const label = new TextSprite(labelTexture);
     label.renderOrder = 1;
 
@@ -339,4 +338,15 @@ function tryConsume(foodItem: Global.collectible) {
     if (compareTag(selectorItem.object, Global.stomachTag) && getUse()) {
         Inventory.setActive3D(foodItem, false);
     }
+}
+
+// updates a collectible's label based on selected language 
+export function translateLabel(collectible: Global.collectible) {
+    const newLabelText = Utils.getTranslatedText(collectible.name);
+
+    const labelTexture = new TextTexture(newLabelText, { fontSize: 24, fillStyle: "black" });
+    const label = new TextSprite(labelTexture);
+    label.renderOrder = 1;
+
+    collectible.label = label;
 }

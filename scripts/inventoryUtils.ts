@@ -2,7 +2,8 @@ import { TextTexture, TextSprite, DrawSprite } from "@enable3d/three-graphics/di
 import { THREE } from "enable3d";
 import { ICONS } from "./icons";
 import * as Global from './global';
-import { makeTrigger } from "./threeUtils";
+import { makeTrigger, translateLabel } from "./threeUtils";
+import { getTranslatedText } from "./utils";
 
 // inventory selector (which item is selected)
 let selectorIndex: number = 0;
@@ -45,7 +46,8 @@ export function addToInventory(collectible: Global.collectible) {
         if (Global.INVENTORY[i] == null && !collectible.object.userData.collected) {
             setActive3D(collectible, false);
             setActive2D(collectible.icon, true, i);
-            setActive2D(collectible.label, true, i, 0, Global.inventorySlotSize / 2)
+            translateLabel(collectible);
+            setActive2D(collectible.label, true, i, 0, Global.inventorySlotSize / 2);
 
             Global.INVENTORY[i] = collectible;
             return;
