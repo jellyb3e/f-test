@@ -43,18 +43,25 @@ function clampDoorPos(num: number) {
 }
 
 // door creation function
-export function makeDoor(x: number, y: number, z: number, rotation: number, physics: AmmoPhysics, nextRoom: string, locked: boolean = false, label: string = "") {
+export function makeDoor(
+    x: number,
+    y: number,
+    z: number,
+    rotation: number,
+    physics: AmmoPhysics,
+    nextRoom: string,
+    locked: boolean = false,
+    factory?: Factories,
+    label: string = "",
+    newLanguage: string = "") {
+
     const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 });
     setDoorLock(door, locked);
     door.body.setCollisionFlags(2);
     door.rotation.y = rotation * (Math.PI / 180);
     door.body.needUpdate = true;
 
-    const labelTexture = new FLAT.TextTexture(label);
-    const labelSprite = new FLAT.TextSprite(labelTexture);
-    labelSprite.setScale(0.02);
-    labelSprite.setPosition(-2, 1);
-    door.add(labelSprite);
+    if (label != "" && factory) makeLabel(factory, label, 0.02, x, y + 1, z + 1);
 
     door.body.on.collision((other: any) => {
         if (compareTag(other, Global.playerTag)) {
@@ -62,6 +69,8 @@ export function makeDoor(x: number, y: number, z: number, rotation: number, phys
                 tryUnlockDoor(door);
                 return;
             }
+
+            if (newLanguage != "") Utils.setSelectedLanuage(newLanguage);
 
             let playerX = clampDoorPos(x);
             let playerY = Global.getPlayerPosition().y;

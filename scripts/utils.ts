@@ -4,6 +4,7 @@ let selectedLanguage: string = "spanish";
 
 export function setSelectedLanuage(language: string) {
     selectedLanguage = language;
+    console.log("language set to " + language);
 }
 
 export function getTranslatedText(id: string): string {
