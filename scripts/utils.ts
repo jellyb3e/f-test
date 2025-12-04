@@ -22,19 +22,23 @@ export function getTranslatedText(id: string): string {
 const darkMode: boolean = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
 export function getSystemBackgroundColor(): number {
-    if (darkMode) {
-        return 0x000000;
-    } else {
-        return 0xf0f0f0;
-    }
+    return darkMode ? 0x010101 : 0xf0f0f0;
 }
 
 export function getSystemTextColor(): string {
-    if (darkMode) {
-        return "white";
-    } else {
-        return "black";
-    }
+    return darkMode ? "white" : "black";
+}
+
+export function getSystemSkyColor(): number {
+    return darkMode ? 0xbbbbff : 0xffffbb;
+}
+
+export function getSystemGroundColor(): number {
+    return darkMode ? 0xddddff : 0xcccc99;
+}
+
+export function getSystemAmbientColor(): number {
+    return darkMode ? 0x333333 : 0x666666;
 }
 
 //#endregion

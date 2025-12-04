@@ -49,7 +49,11 @@ export const STOMACH_COLOR = 0xba759d;
 
 export const INVENTORY_BORDER_COLOR = 0x2a2a2a;
 export const INVENTORY_FILL_COLOR = 0x000000;
-export const INVENTORY_SELECTOR_COLOR = 0x153a1f;
+export const INVENTORY_SELECTOR_COLOR = YELLOW;
+
+export const SKY_LIGHT_COLOR = Utils.getSystemSkyColor();
+export const GROUND_LIGHT_COLOR = Utils.getSystemGroundColor();
+export const AMBIENT_LIGHT_COLOR = Utils.getSystemAmbientColor();
 
 // materials
 export const unlockedDoorMat = new THREE.MeshLambertMaterial({ color: DOOR_COLOR });

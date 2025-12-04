@@ -16,8 +16,8 @@ export const Room11Scene = () => {
     scene.background = new THREE.Color(Global.BACKGROUND_COLOR);
 
     // light
-    scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 1));
-    scene.add(new THREE.AmbientLight(0x666666));
+    scene.add(new THREE.HemisphereLight(Global.SKY_LIGHT_COLOR, Global.GROUND_LIGHT_COLOR, 1));
+    scene.add(new THREE.AmbientLight(Global.AMBIENT_LIGHT_COLOR));
 
     // physics
     const physics = new AmmoPhysics(scene as any);
