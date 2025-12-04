@@ -19,7 +19,7 @@ function drawSlot(i: number, slotType: "slot" | "selector" = "slot") {
     Global.gameScene2D.add(slot);
 
     if (slotType == "slot") {
-        const inputLabelTexture = new TextTexture(`${i + 1}`, { fontSize: 24, fillStyle: "black" });
+        const inputLabelTexture = new TextTexture(`${i + 1}`, { fontSize: 24, fillStyle: Global.TEXT_COLOR });
         const inputLabel = new TextSprite(inputLabelTexture);
         inputLabel.setPosition(slot.position.x, slot.position.y + (Global.inventorySlotSize / 2));
         inputLabel.renderOrder = 1;

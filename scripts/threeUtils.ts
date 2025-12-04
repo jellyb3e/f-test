@@ -126,7 +126,7 @@ export function makeCollectible(
     object.userData.tag = Global.collectibleTag;
     object.userData.collected = false;
 
-    const labelTexture = new TextTexture(name, { fontSize: 24, fillStyle: "black" });
+    const labelTexture = new TextTexture(name, { fontSize: 24, fillStyle: Global.TEXT_COLOR });
     const label = new TextSprite(labelTexture);
     label.renderOrder = 1;
 
@@ -298,7 +298,7 @@ export function makeLabel(
     y: number = 0,
     z: number = 0) {
 
-    const labelTexture = new TextTexture(label);
+    const labelTexture = new TextTexture(label,{ fillStyle: Global.TEXT_COLOR });
     const spriteTexture = new TextSprite(labelTexture);
     spriteTexture.setScale(scale);
     spriteTexture.position.set(x, y, z);
@@ -308,7 +308,7 @@ export function makeLabel(
 
 export function drawEndScene() {
     // add 2d text
-    const labelTexture = new TextTexture('room 12.', { fontSize: 48, fillStyle: "black" });
+    const labelTexture = new TextTexture('room 12.', { fontSize: 48, fillStyle: Global.TEXT_COLOR });
     const label = new TextSprite(labelTexture);
 
     label.setPosition(Global.width / 2, Global.height / 2);
@@ -344,7 +344,7 @@ function tryConsume(foodItem: Global.collectible) {
 export function updateLabel(collectible: Global.collectible, newText: string = "") {
     const newLabelText = (newText == "") ? Utils.getTranslatedText(collectible.name) : newText;
 
-    const labelTexture = new TextTexture(newLabelText, { fontSize: 24, fillStyle: "black" });
+    const labelTexture = new TextTexture(newLabelText, { fontSize: 24, fillStyle: Global.TEXT_COLOR });
     const label = new TextSprite(labelTexture);
     label.renderOrder = 1;
 
