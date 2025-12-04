@@ -2,6 +2,7 @@ import { AmmoPhysics } from '@enable3d/ammo-physics';
 import { DrawSprite, TextSprite } from '@enable3d/three-graphics/dist/flat';
 import { ExtendedMesh } from 'enable3d';
 import * as THREE from 'three';
+import * as Utils from './utils';
 
 // type declarations
 export type collectible = {
@@ -33,7 +34,7 @@ export const gameScene2D = new THREE.Scene();
 export const endScene2D = new THREE.Scene();
 
 // colors
-export const BACKGROUND_COLOR = 0xf0f0f0;
+export const BACKGROUND_COLOR = Utils.getSystemBackgroundColor();
 export const WALL_COLOR = 0x4b9963;
 export const GROUND_COLOR = 0x215e34;
 export const DOOR_COLOR = 0x67a66e;     // unlocked doors
