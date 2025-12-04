@@ -93,7 +93,7 @@ function tryUnlockDoor(door: ExtendedMesh) {
 
     if (compareTag(selectorItem.object, Global.keyTag) && getUse()) {
         setDoorLock(door, false);
-        Inventory.setActive2D(selectorItem.icon, selectorItem.label, false);
+        Inventory.setActive2D(selectorItem.icon, false);
         Global.INVENTORY[Inventory.getSelectorIndex()] = null;
     }
 }

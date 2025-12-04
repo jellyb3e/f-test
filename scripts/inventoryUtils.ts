@@ -44,7 +44,8 @@ export function addToInventory(collectible: Global.collectible) {
     for (let i = 0; i < Global.inventorySlots; i++) {
         if (Global.INVENTORY[i] == null && !collectible.object.userData.collected) {
             setActive3D(collectible, false);
-            setActive2D(collectible.icon, collectible.label, true, i);
+            setActive2D(collectible.icon, true, i);
+            setActive2D(collectible.label, true, i, 0, Global.inventorySlotSize / 2)
 
             Global.INVENTORY[i] = collectible;
             return;
@@ -90,7 +91,8 @@ export function dropCurrentItem() {
         }
     }
     setActive3D(selectorItem, true);
-    setActive2D(selectorItem.icon, selectorItem.label, false);
+    setActive2D(selectorItem.icon, false);
+    setActive2D(selectorItem.label, false);
     AddToSceneCollectibles(selectorItem);
     Global.INVENTORY[selectorIndex] = null;
 }
@@ -135,7 +137,7 @@ function getDropPosition(dropDist: number = 2) {
     return dropPosVec2;
 }
 
-export function setActive2D(icon: DrawSprite, label: TextSprite, active: boolean, i: number = 0, posOffsetX: number = 0, posOffsetY: number = 0) {
+export function setActive2D(icon: DrawSprite | TextSprite, active: boolean, i: number = 0, posOffsetX: number = 0, posOffsetY: number = 0) {
     if (active) {
         Global.gameScene2D.add(icon);
         const iconPos = inventoryIndexToScreenPos(i);
