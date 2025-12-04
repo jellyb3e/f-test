@@ -135,16 +135,13 @@ function getDropPosition(dropDist: number = 2) {
     return dropPosVec2;
 }
 
-export function setActive2D(icon: DrawSprite, label: TextSprite, active: boolean, i: number = 0) {
+export function setActive2D(icon: DrawSprite, label: TextSprite, active: boolean, i: number = 0, posOffsetX: number = 0, posOffsetY: number = 0) {
     if (active) {
         Global.gameScene2D.add(icon);
-        Global.gameScene2D.add(label);
         const iconPos = inventoryIndexToScreenPos(i);
-        icon.setPosition(iconPos.x, iconPos.y);
-        label.setPosition(iconPos.x, iconPos.y - (Global.inventorySlotSize / 2));
+        icon.setPosition(iconPos.x - posOffsetX, iconPos.y - posOffsetY);
     } else {
         Global.gameScene2D.remove(icon);
         icon.setPosition(-100, -100);
-        label.setPosition(-100, -100);
     }
 }
