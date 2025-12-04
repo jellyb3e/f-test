@@ -1,18 +1,18 @@
 {
     "Ball": {
-        "french": "balle",
-        "spanish": "belota"
+        "japanese": "ボール",
+        "arabic": "كرة"
     },
     "Key": {
-        "french": "keyfrench",
-        "spanish": "keyspanish"
+        "japanese": "キー",
+        "arabic": "مفتاح"
     },
     "Puzzle": {
-        "french": "puzzlefrench",
-        "spanish": "puzzlespanish"
+        "japanese": "パズル",
+        "arabic": "لغز"
     },
     "Stomach": {
-        "french": "stomachfrench",
-        "spanish": "estomago"
+        "japanese": "胃",
+        "arabic": "المعدة"
     }
 }

@@ -1,14 +1,14 @@
 import language from "../language.json";
 
-let selectedLanguage: string = "spanish";
+let selectedLanguage: string = "english";
 
-export function setSelectedLanuage(language: string) {
-    selectedLanguage = language;
-    console.log("language set to " + language);
+export function getSelectedLanguage() { return selectedLanguage; }
+
+export function setSelectedLanuage(newLanguage: string) {
+    selectedLanguage = newLanguage;
 }
 
 export function getTranslatedText(id: string): string {
     if (selectedLanguage == "english") return id;
-    console.log(language[id][selectedLanguage]);
     return language[id][selectedLanguage];
 }
