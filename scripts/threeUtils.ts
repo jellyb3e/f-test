@@ -413,3 +413,34 @@ export function makeCouch(x: number, y: number, z: number, physics: AmmoPhysics,
     );
     return collectible;
 }
+
+export function makeTable(x: number, y: number, z: number, physics: AmmoPhysics, factory: Factories) {
+    const legOffset = .625;
+
+    // invisible structure for physics
+    const table = physics.add.box({ x, y, z, width: 2.5, depth: 2.5, height: 1.75 }, { lambert: { visible: false } });
+
+    const tabletop = factory.add.box({ x: 0, y: .5, z: 0, width: 2.5, depth: 2.5, height: .5 }, { lambert: { color: Global.PUZZLE_COLOR } });
+    table.add(tabletop);
+
+    // legs
+    const dels = [-1, 1];
+    for (const delx of dels) {
+        for (const delz of dels) {
+            const leg = factory.add.box({ x: (legOffset * delx), y: 0, z: (legOffset * delz), width: .625, depth: .625, height: 1.25 }, { lambert: { color: Global.PUZZLE_COLOR } });
+            table.add(leg);
+        }
+    }
+
+    const collectible = makeCollectible(
+        "Table",
+        ICONS.puzzle.draw(),
+        table,
+        1,
+        1,
+        physics,
+        () => { },
+        2
+    );
+    return collectible;
+}

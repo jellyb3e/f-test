@@ -66,6 +66,6 @@ PhysicsLoader('ammo', () => {
         'room23': Room23Scene()
     });
 
-    Global.setCurrentScene("room00");
+    Global.setCurrentScene("room11");
     MasterScene();
 });
