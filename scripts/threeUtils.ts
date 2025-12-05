@@ -188,6 +188,7 @@ export function makeCollectible(
         trigger,
         quantity,
         stackSize,
+        triggerRadius,
         triggerUpdate: () => {
             if (!collectible.trigger || !collectible.trigger.body) return;
             collectible.trigger.position.copy(object.position);

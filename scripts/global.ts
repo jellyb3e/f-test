@@ -14,6 +14,7 @@ export type collectible = {
     trigger: ExtendedMesh;
     quantity: number;
     stackSize: number;
+    triggerRadius: number,
     triggerUpdate: () => void;
     collisionCallback: (other: any) => void;
 }

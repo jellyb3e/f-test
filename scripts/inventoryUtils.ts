@@ -122,7 +122,7 @@ export function setActive3D(collectible: Global.collectible, value: boolean, pla
     scene.physics.add.existing(object);
     scene.scene.add(object);
 
-    collectible.trigger = ThreeUtils.makeTrigger(scene.physics);
+    collectible.trigger = ThreeUtils.makeTrigger(scene.physics,collectible.triggerRadius);
     scene.scene.add(collectible.trigger);
     bindTriggerCollision(collectible);
     AddToSceneCollectibles(collectible, scene);
