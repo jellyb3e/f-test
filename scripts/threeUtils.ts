@@ -256,7 +256,6 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
     ceiling.visible = false;
     ground.add(ceiling);
 
-    /*
     const maze: ExtendedMesh[] = [];
     for (let i: number = 0; i < 16; i++) {
         for (let j: number = 0; j < 16; j++) {
@@ -281,7 +280,6 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
             }
         }
     }
-        */
 
     makeHand(9.75, 2, 5, "right", ground, factory);
     makeHand(-9.75, 2, 5, "left", ground, factory);
@@ -294,10 +292,10 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
 
         ground.body.needUpdate = true;
         ceiling.body.needUpdate = true;
-        /*
+
         maze.forEach((cell: ExtendedMesh) => {
             cell.body.needUpdate = true;
-        });*/
+        });
     }
 
     return updateRotation;
