@@ -14,7 +14,7 @@
 1. [Continuous Inventory] - The quantity of the stomach dictates whether or not you can unlock the door once you have the key. If you are hungry, you cannot unlock the door.
 2. [Visual Themes] - Our game supports light and dark mode and will check the user's device settings and change the color scheme accordingly. This impacts background and text color, as well as scene lighting.
 3. [i18n + l10n] - Our game supports 3 languages, English, Japanese, and Arabic. The user can select the game's language by entering one of the three language doors. We also have utility functions to dynamically translate inventory items as they are picked up.
-4. [External DSL] - We created a JSON file to define the translated versions of all of the words in our game which use the English word as its key.
+4. [External DSL] - We created a JSON file to define the translated versions of all of the words in our game which use the English word as its key. We've also defined a schema for the language file with hover documentation and type-checking to ensure that only our supported languages can have translations.
 
 ### Reflection
 
