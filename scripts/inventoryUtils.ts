@@ -158,7 +158,7 @@ export function updateQuantityLabel(collectible: Global.collectible, i: number, 
     const offsetPosY = Global.inventorySlotSize / 4
 
     collectible.quantity = Math.min(collectible.quantity + value, collectible.stackSize);
-    updateCollectibleLabel(collectible, "quantityLabel", i, offsetPosX, offsetPosY, `${collectible.quantity}/${collectible.stackSize}`);
+    updateCollectibleLabel(collectible, "quantityLabel", i, offsetPosX, offsetPosY, `${collectible.quantity.toFixed(1)}/${collectible.stackSize}`);
 }
 
 // updates a collectible's label based on selected language 

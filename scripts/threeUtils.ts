@@ -144,12 +144,16 @@ export function makePlayer(physics: AmmoPhysics) {
     const pos = Global.getPlayerPosition();
     const player = physics.add.capsule({ x: pos.x, y: pos.y, z: pos.z, radius: 0.75, length: 1, mass: 1 }, { lambert: { color: Global.PLAYER_COLOR } });
     player.body.setAngularFactor(0, 0, 0);
-    player.userData.tag = Global.playerTag;
+    setTag(player, Global.playerTag);
     return player;
 }
 
 export function compareTag(object: ExtendedMesh, otherTag: string) {
     return object.userData.tag == otherTag;
+}
+
+export function setTag(object: ExtendedMesh, tag: string) {
+    object.userData.tag = tag;
 }
 
 function collected(collectible: ExtendedMesh) {
@@ -162,10 +166,11 @@ export function makeCollectible(
     quantity: number,
     stackSize: number,
     physics: AmmoPhysics,
+    nutrition: number,
     onCollect: Function = () => { },
     triggerRadius: number = 1
 ) {
-    object.userData.tag = Global.collectibleTag;
+    setTag(object, Global.collectibleTag);
     object.userData.collected = false;
 
     const labelTexture = new TextTexture(name, { fontSize: 24, fillStyle: Global.TEXT_COLOR });
@@ -187,6 +192,7 @@ export function makeCollectible(
         trigger,
         quantity,
         stackSize,
+        nutrition,
         triggerRadius,
         triggerUpdate: () => {
             if (!collectible.trigger || !collectible.trigger.body) return;
@@ -215,9 +221,10 @@ export function makeKey(x: number, y: number, z: number, physics: AmmoPhysics) {
         1,
         1,
         physics,
+        1000,
         () => { Global.setHasKey(true); }
     );
-    key.object.userData.tag = Global.keyTag;
+    setTag(key.object, Global.keyTag);
     key.object.userData.parent = key;
     return key;
 }
@@ -303,10 +310,11 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
 
 export function makePuzzleCollectible(x: number, y: number, z: number, physics: AmmoPhysics) {
     const puzzle = physics.add.box({ x: x, y: y, z: z, width: 1.5, depth: 1.5, height: .3 }, { lambert: { color: Global.PUZZLE_COLOR } });
-    const collectible = makeCollectible("Puzzle", puzzle, 1, 1, physics, () => {
+    const collectible = makeCollectible("Puzzle", puzzle, 1, 1, physics, 1, () => {
         Global.setCurrentScene("room22");
         Global.setHoldingPuzzle(true);
     });
+    setTag(collectible.object, Global.puzzleTag);
     return collectible;
 }
 
@@ -352,11 +360,11 @@ export function makeStomach(x: number, y: number, z: number, physics: AmmoPhysic
         "Stomach",
         stomach,
         0,
-        1,
-        physics
+        10,
+        physics,
+        1000
     );
-    stomachCollectible.object.userData.tag = Global.stomachTag;
-
+    setTag(stomachCollectible.object, Global.stomachTag);
 
     return stomachCollectible;
 }
@@ -364,11 +372,18 @@ export function makeStomach(x: number, y: number, z: number, physics: AmmoPhysic
 function tryConsume(foodItem: Global.collectible) {
     const selectorItem = Global.INVENTORY[Inventory.getSelectorIndex()];
     if (!selectorItem) return;
+    // prevent eating key and puzzle (when it has not been solved)
+    if (compareTag(foodItem.object, Global.keyTag) || (compareTag(foodItem.object, Global.puzzleTag) && !Global.getHasKey())) return;
 
-    if (compareTag(selectorItem.object, Global.stomachTag) && getUse()) {
-        Inventory.setActive3D(foodItem, false);
-        Inventory.updateQuantityLabel(selectorItem, Inventory.getSelectorIndex(), 1);
-        Global.setFull(selectorItem.quantity == selectorItem.stackSize);
+    if (compareTag(selectorItem.object, Global.stomachTag)) {
+        const eatAmount = .1;
+        if (getUse() && !Global.getFull()) {
+            foodItem.nutrition -= eatAmount;
+            console.log(foodItem.nutrition);
+            if (foodItem.nutrition <= 0) Inventory.setActive3D(foodItem, false);
+            Inventory.updateQuantityLabel(selectorItem, Inventory.getSelectorIndex(), eatAmount);
+            Global.setFull(selectorItem.quantity == selectorItem.stackSize);
+        }
     }
 }
 
@@ -404,6 +419,7 @@ export function makeCouch(x: number, y: number, z: number, physics: AmmoPhysics,
         1,
         1,
         physics,
+        5,
         () => { },
         3
     );
@@ -434,6 +450,7 @@ export function makeTable(x: number, y: number, z: number, physics: AmmoPhysics,
         1,
         1,
         physics,
+        2,
         () => { },
         2
     );

@@ -14,6 +14,7 @@ export type collectible = {
     trigger: ExtendedMesh;
     quantity: number;
     stackSize: number;
+    nutrition: number;
     triggerRadius: number,
     triggerUpdate: () => void;
     collisionCallback: (other: any) => void;
@@ -66,6 +67,7 @@ export const playerTag = "player";
 export const collectibleTag = "collectible";
 export const keyTag = "key";
 export const stomachTag = "stomach";
+export const puzzleTag = "puzzle";
 
 // tunable gameplay values
 export const MOVE_SPEED = 3;
