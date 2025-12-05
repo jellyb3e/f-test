@@ -163,7 +163,8 @@ export function makeCollectible(
     quantity: number,
     stackSize: number,
     physics: AmmoPhysics,
-    onCollect: Function = () => { }
+    onCollect: Function = () => { },
+    triggerRadius: number = 1
 ) {
     object.userData.tag = Global.collectibleTag;
     object.userData.collected = false;
@@ -176,7 +177,7 @@ export function makeCollectible(
     const quantityLabel = new TextSprite(quantityLabelTexture);
     quantityLabel.renderOrder = 1;
 
-    const trigger = makeTrigger(physics);
+    const trigger = makeTrigger(physics, triggerRadius);
 
     const collectible: Global.collectible = {
         name,
@@ -222,8 +223,8 @@ export function makeKey(x: number, y: number, z: number, physics: AmmoPhysics) {
     return key;
 }
 
-export function makeTrigger(physics: AmmoPhysics) {
-    const trigger = physics.add.sphere({ x: 0, y: 0, z: 0, radius: 1, collisionFlags: 6 });
+export function makeTrigger(physics: AmmoPhysics, radius: number = 1) {
+    const trigger = physics.add.sphere({ x: 0, y: 0, z: 0, radius: radius, collisionFlags: 6 });
     trigger.visible = false;
     return trigger;
 }
@@ -389,11 +390,11 @@ export function makeLabel3D(newText: string = "", factory: Factories, x: number,
 
 export function makeCouch(x: number, y: number, z: number, physics: AmmoPhysics, factory: Factories) {
     // CUSHION
-    const couch = physics.add.box({ x, y, z, width: 5, depth: 3, height: 1 }, { lambert: { color: Global.GREEN } });
+    const couch = physics.add.box({ x, y, z, width: 5, depth: 2.5, height: 1 }, { lambert: { color: Global.GREEN } });
 
-    const backrest = factory.add.box({ x: 0, y: 1, z: -0.75, width: 5, depth: 1, height: 1 }, { lambert: { color: Global.GREEN } });
-    const leftArmrest = factory.add.box({ x: -2, y: 0.75, z: 0, width: 1, depth: 3, height: 0.5 }, { lambert: { color: Global.GREEN } });
-    const rightArmrest = factory.add.box({ x: 2, y: 0.75, z: 0, width: 1, depth: 3, height: 0.5 }, { lambert: { color: Global.GREEN } });
+    const backrest = factory.add.box({ x: 0, y: 1.125, z: -.625, width: 5, depth: 1.25, height: 1 }, { lambert: { color: Global.GREEN } });
+    const leftArmrest = factory.add.box({ x: -2, y: 0.75, z: 0, width: 1, depth: 2.5, height: 0.5 }, { lambert: { color: Global.GREEN } });
+    const rightArmrest = factory.add.box({ x: 2, y: 0.75, z: 0, width: 1, depth: 2.5, height: 0.5 }, { lambert: { color: Global.GREEN } });
 
     couch.add(backrest);
     couch.add(leftArmrest);
@@ -405,7 +406,9 @@ export function makeCouch(x: number, y: number, z: number, physics: AmmoPhysics,
         couch,
         1,
         1,
-        physics
+        physics,
+        () => { },
+        3
     );
     return collectible;
 }
