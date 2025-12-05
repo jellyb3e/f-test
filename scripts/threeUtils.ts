@@ -221,8 +221,7 @@ export function makeKey(x: number, y: number, z: number, physics: AmmoPhysics) {
         1,
         1,
         physics,
-        1000,
-        () => { Global.setHasKey(true); }
+        1000
     );
     setTag(key.object, Global.keyTag);
     key.object.userData.parent = key;
@@ -253,6 +252,7 @@ function makePuzzleSolveTrigger(physics: AmmoPhysics) {
             const keyCollectible = other.userData.parent;
             Inventory.setActive3D(keyCollectible, false);
             Inventory.setActive3D(keyCollectible, true, true, Global.getLastScene());
+            Global.setHasKey(true);
         }
     });
 }
@@ -377,10 +377,9 @@ function tryConsume(foodItem: Global.collectible) {
 
     if (compareTag(selectorItem.object, Global.stomachTag)) {
         const eatAmount = .1;
-        if (getUse() && !Global.getFull()) {
-            foodItem.nutrition -= eatAmount;
-            console.log(foodItem.nutrition);
-            if (foodItem.nutrition <= 0) Inventory.setActive3D(foodItem, false);
+        if (getUse()) {
+            foodItem.nutrition = Math.max(0, foodItem.nutrition - eatAmount);
+            if (foodItem.nutrition == 0) { Inventory.setActive3D(foodItem, false); }
             Inventory.updateQuantityLabel(selectorItem, Inventory.getSelectorIndex(), eatAmount);
             Global.setFull(selectorItem.quantity == selectorItem.stackSize);
         }

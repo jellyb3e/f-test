@@ -122,7 +122,7 @@ export function setActive3D(collectible: Global.collectible, value: boolean, pla
     scene.physics.add.existing(object);
     scene.scene.add(object);
 
-    collectible.trigger = ThreeUtils.makeTrigger(scene.physics,collectible.triggerRadius);
+    collectible.trigger = ThreeUtils.makeTrigger(scene.physics, collectible.triggerRadius);
     scene.scene.add(collectible.trigger);
     bindTriggerCollision(collectible);
     AddToSceneCollectibles(collectible, scene);
@@ -158,7 +158,7 @@ export function updateQuantityLabel(collectible: Global.collectible, i: number, 
     const offsetPosY = Global.inventorySlotSize / 4
 
     collectible.quantity = Math.min(collectible.quantity + value, collectible.stackSize);
-    updateCollectibleLabel(collectible, "quantityLabel", i, offsetPosX, offsetPosY, `${collectible.quantity.toFixed(1)}/${collectible.stackSize}`);
+    updateCollectibleLabel(collectible, "quantityLabel", i, offsetPosX, offsetPosY, `${Math.round(collectible.quantity*10)/10}/${collectible.stackSize}`);
 }
 
 // updates a collectible's label based on selected language 
