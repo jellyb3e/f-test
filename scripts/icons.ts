@@ -10,17 +10,20 @@ export const ICONS = {
     "inventorySelector": {
         draw: () => { return new DrawSprite(Global.inventorySlotSize, Global.inventorySlotSize, drawRectangle(ohexToRGBA(Global.INVENTORY_SELECTOR_COLOR), "")); }
     },
-    "puzzle": {
+    "Puzzle": {
         draw: () => { return new DrawSprite(Global.inventorySlotSize / 2, Global.inventorySlotSize / 2, drawRectangle("", ohexToRGBA(Global.PUZZLE_COLOR))); }
     },
-    "ball": {
+    "Key": {
         draw: () => { return new DrawSprite(Global.inventorySlotSize / 2, Global.inventorySlotSize / 2, drawCircle("", ohexToRGBA(Global.YELLOW))); }
     },
-    "stomach": {
+    "Stomach": {
         draw: () => { return new DrawSprite(Global.inventorySlotSize / 2, Global.inventorySlotSize / 2, drawStomach("", ohexToRGBA(Global.STOMACH_COLOR))); }
     },
-    "couch": {
+    "Couch": {
         draw: () => { return new DrawSprite(Global.inventorySlotSize / 2, Global.inventorySlotSize / 2, drawRectangle("", ohexToRGBA(Global.GREEN))); }
+    },
+    "Table": {
+        draw: () => { return new DrawSprite(Global.inventorySlotSize / 2, Global.inventorySlotSize / 2, drawTable("", ohexToRGBA(Global.PUZZLE_WALL_COLOR))); }
     }
 }
 
@@ -61,6 +64,27 @@ const drawStomach = (strokeStyle: string, fillStyle: string) => (ctx) => {
     ctx.lineWidth = 5;
 
     ctx.ellipse(width / 2, width / 2, width / 2, width / 3, 0, 0, 2 * Math.PI);
+
+    if (fillStyle) ctx.fill();
+    if (strokeStyle) ctx.stroke();
+};
+
+const drawTable = (strokeStyle: string, fillStyle: string) => (ctx) => {
+    const { width } = ctx.canvas;
+
+    ctx.beginPath();
+    ctx.strokeStyle = strokeStyle;
+    ctx.fillStyle = fillStyle;
+    ctx.lineWidth = 5;
+
+    ctx.rect(0, width * 0.25, width, width * 0.375);
+
+    const legWidth = width * 0.25;
+    const legHeight = width * .375;
+    const legY = width * 0.505;
+
+    ctx.rect(width * 0.15, legY, legWidth, legHeight);
+    ctx.rect(width * 0.65, legY, legWidth, legHeight);
 
     if (fillStyle) ctx.fill();
     if (strokeStyle) ctx.stroke();

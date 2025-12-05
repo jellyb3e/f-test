@@ -158,7 +158,6 @@ function collected(collectible: ExtendedMesh) {
 
 export function makeCollectible(
     name: string,
-    icon: DrawSprite,
     object: ExtendedMesh,
     quantity: number,
     stackSize: number,
@@ -181,7 +180,7 @@ export function makeCollectible(
 
     const collectible: Global.collectible = {
         name,
-        icon,
+        icon: ICONS[name].draw(),
         label,
         object,
         quantityLabel,
@@ -212,7 +211,6 @@ export function makeCollectible(
 export function makeKey(x: number, y: number, z: number, physics: AmmoPhysics) {
     const key = makeCollectible(
         "Key",
-        ICONS.ball.draw(),
         physics.add.sphere({ x: x, y: y, z: z, radius: 0.4 }, { lambert: { color: Global.YELLOW } }),
         1,
         1,
@@ -305,7 +303,7 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
 
 export function makePuzzleCollectible(x: number, y: number, z: number, physics: AmmoPhysics) {
     const puzzle = physics.add.box({ x: x, y: y, z: z, width: 1.5, depth: 1.5, height: .3 }, { lambert: { color: Global.PUZZLE_COLOR } });
-    const collectible = makeCollectible("Puzzle", ICONS.puzzle.draw(), puzzle, 1, 1, physics, () => {
+    const collectible = makeCollectible("Puzzle", puzzle, 1, 1, physics, () => {
         Global.setCurrentScene("room22");
         Global.setHoldingPuzzle(true);
     });
@@ -352,7 +350,6 @@ export function makeStomach(x: number, y: number, z: number, physics: AmmoPhysic
     const stomach = physics.add.capsule({ x: x, y: y, z: z, radius: .3, length: .5 }, { lambert: { color: Global.STOMACH_COLOR } });
     const stomachCollectible = makeCollectible(
         "Stomach",
-        ICONS.stomach.draw(),
         stomach,
         0,
         1,
@@ -403,7 +400,6 @@ export function makeCouch(x: number, y: number, z: number, physics: AmmoPhysics,
 
     const collectible = makeCollectible(
         "Couch",
-        ICONS.couch.draw(),
         couch,
         1,
         1,
@@ -420,21 +416,20 @@ export function makeTable(x: number, y: number, z: number, physics: AmmoPhysics,
     // invisible structure for physics
     const table = physics.add.box({ x, y, z, width: 2.5, depth: 2.5, height: 1.75 }, { lambert: { visible: false } });
 
-    const tabletop = factory.add.box({ x: 0, y: .5, z: 0, width: 2.5, depth: 2.5, height: .5 }, { lambert: { color: Global.PUZZLE_COLOR } });
+    const tabletop = factory.add.box({ x: 0, y: .5, z: 0, width: 2.5, depth: 2.5, height: .5 }, { lambert: { color: Global.PUZZLE_WALL_COLOR } });
     table.add(tabletop);
 
     // legs
     const dels = [-1, 1];
     for (const delx of dels) {
         for (const delz of dels) {
-            const leg = factory.add.box({ x: (legOffset * delx), y: 0, z: (legOffset * delz), width: .625, depth: .625, height: 1.25 }, { lambert: { color: Global.PUZZLE_COLOR } });
+            const leg = factory.add.box({ x: (legOffset * delx), y: 0, z: (legOffset * delz), width: .625, depth: .625, height: 1.25 }, { lambert: { color: Global.PUZZLE_WALL_COLOR } });
             table.add(leg);
         }
     }
 
     const collectible = makeCollectible(
         "Table",
-        ICONS.puzzle.draw(),
         table,
         1,
         1,

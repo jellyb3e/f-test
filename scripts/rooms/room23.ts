@@ -19,8 +19,10 @@ export const Room23Scene = () => {
 
     // physics
     const physics = new AmmoPhysics(scene as any);
+    const { factory } = physics;
     const collectibles: Global.collectible[] = [
-        ThreeUtils.makePuzzleCollectible(3, 1, 3, physics)
+        ThreeUtils.makeTable(3, 2, 3, physics, factory),
+        ThreeUtils.makePuzzleCollectible(3, 3, 3, physics)
     ];
 
     // PLAYER

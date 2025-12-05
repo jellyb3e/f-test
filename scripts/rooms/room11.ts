@@ -23,14 +23,6 @@ export const Room11Scene = () => {
     const physics = new AmmoPhysics(scene as any);
     const { factory } = physics;
     const collectibles: Global.collectible[] = [
-        ThreeUtils.makeCollectible(
-            "Ball",
-            ICONS.ball.draw(),
-            physics.add.sphere({ x: 0, y: 1.2, z: 0, radius: 0.4 }, { lambert: { color: Global.YELLOW } }),
-            1,
-            1,
-            physics
-        ),
         ThreeUtils.makeStomach(3, 1, 3, physics),
         ThreeUtils.makeCouch(-5, 2, -9, physics, factory),
         ThreeUtils.makeTable(-5, 2, -4, physics, factory)
