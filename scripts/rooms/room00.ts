@@ -36,6 +36,9 @@ export const Room00Scene = () => {
     // LANGUAGE 3
     ThreeUtils.makeLanguageDoor(5, 2, -10, 90, physics, "room11", false, factory, "عربي", "arabic");
 
+    // LANGUAGE 3
+    ThreeUtils.makeLanguageDoor(0, 2, 10, 90, physics, "room11", false, factory, "ᓚᘏᗢ", "meow", -1);
+
     // label above the doors
     let label = ThreeUtils.makeLabel3D("Choose VERY wisely.", factory, 0, 7, -8);
 

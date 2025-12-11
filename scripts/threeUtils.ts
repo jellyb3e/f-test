@@ -53,7 +53,7 @@ export function makeDoor(
     locked: boolean = false,
     collisionCallback: Function = () => { },
     lockedCollisionCallback: Function = () => { },
-    passthroughCondition: Function = () => { return true; }
+    passthroughCondition: Function = () => { return true; },
 ) {
 
     const door = physics.add.box({ x: x, y: y, z: z, width: .25, height: 3, depth: 2 });
@@ -92,13 +92,14 @@ export function makeLanguageDoor(
     locked: boolean = false,
     factory: Factories,
     labelText: string,
-    newLanguage: string
+    newLanguage: string,
+    zOffset: number = 1
 ) {
     const door = makeDoor(x, y, z, rotation, physics, nextRoom, locked, () => {
         Utils.setSelectedLanuage(newLanguage);
         console.log("language changed to " + Utils.getSelectedLanguage());
     });
-    makeLabel3D(labelText, factory, x, y, z + 1);
+    makeLabel3D(labelText, factory, x, y, z + zOffset);
 }
 
 export function makeExitDoor(
@@ -263,6 +264,7 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
     ceiling.visible = false;
     ground.add(ceiling);
 
+    /*
     const maze: ExtendedMesh[] = [];
     for (let i: number = 0; i < 16; i++) {
         for (let j: number = 0; j < 16; j++) {
@@ -287,7 +289,7 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
             }
         }
     }
-
+*/
     makeHand(9.75, 2, 5, "right", ground, factory);
     makeHand(-9.75, 2, 5, "left", ground, factory);
     makePuzzleSolveTrigger(physics);
@@ -299,10 +301,11 @@ export function makePuzzle(physics: AmmoPhysics, factory: Factories) {
 
         ground.body.needUpdate = true;
         ceiling.body.needUpdate = true;
-
+    /*
         maze.forEach((cell: ExtendedMesh) => {
             cell.body.needUpdate = true;
         });
+    */
     }
 
     return updateRotation;

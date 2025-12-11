@@ -1,34 +1,42 @@
 {
     "Ball": {
         "japanese": "ボール",
-        "arabic": "كرة"
+        "arabic": "كرة",
+        "meow": "meow"
     },
     "Key": {
         "japanese": "キー",
-        "arabic": "مفتاح"
+        "arabic": "مفتاح",
+        "meow": "meow"
     },
     "Puzzle": {
         "japanese": "パズル",
-        "arabic": "لغز"
+        "arabic": "لغز",
+        "meow": "meow"
     },
     "Stomach": {
         "japanese": "胃",
-        "arabic": "المعدة"
+        "arabic": "المعدة",
+        "meow": "meow"
     },
     "room 12.": {
         "japanese": "12号室。",
-        "arabic": "الغرفة رقم 12."
+        "arabic": "الغرفة رقم 12.",
+        "meow": "meow 12."
     },
     "Couch": {
         "japanese": "カウチ",
-        "arabic": "أريكة"
+        "arabic": "أريكة",
+        "meow": "meow"
     },
     "Table": {
         "japanese": "テーブル",
-        "arabic": "طاولة"
+        "arabic": "طاولة",
+        "meow": "meow"
     },
     "TOO HUNGRY TO UNLOCK": {
         "japanese": "お腹が空きすぎてロックを解除できない",
-        "arabic": "جائع جداً لدرجة لا تسمح لي بفتح القفل"
+        "arabic": "جائع جداً لدرجة لا تسمح لي بفتح القفل",
+        "meow": "meow meow meow meow"
     }
 }

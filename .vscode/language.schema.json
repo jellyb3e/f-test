@@ -4,7 +4,7 @@
     "type": "object",
     "additionalProperties": {
         "type": "object",
-        "required": [ "japanese", "arabic"],
+        "required": [ "japanese", "arabic","meow"],
         "additionalProperties": false,
         "properties": {
             "japanese": {
@@ -13,6 +13,10 @@
             },
             "arabic": {
                 "description": "The Arabic translation of the English text.",
+                "type": "string"
+            },
+            "meow": {
+                "description": "The Meow translation of the English text.",
                 "type": "string"
             }
         }
